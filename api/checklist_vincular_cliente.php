@@ -1,5 +1,6 @@
 <?php
 include_once("db_conexao.php");
+include_once("notificacao_criar_helper.php");
 session_start();
 
 $retorno = [
@@ -133,11 +134,35 @@ try {
 
     $conexao->commit();
 
+    // --- Notificação: cliente vinculado ao projeto ---
+    // Busca título do checklist recém vinculado
+    $stmt_titulo = $conexao->prepare(
+        "SELECT titulo FROM checklists WHERE id = ? LIMIT 1"
+    );
+    $stmt_titulo->bind_param("i", $checklist_id);
+    $stmt_titulo->execute();
+    $titulo_res = $stmt_titulo->get_result();
+    if ($titulo_res->num_rows > 0) {
+        $titulo_ch = $titulo_res->fetch_assoc()['titulo'];
+        if ($usuario_id) {
+            criar_notificacao(
+                $conexao,
+                $usuario_id,
+                'vinculado_projeto',
+                "📂 Você foi vinculado a um projeto!",
+                "Seu acesso ao projeto \"{$titulo_ch}\" foi confirmado. Acesse seu painel para ver os itens pendentes.",
+                "public/pages/dashboard_client.html"
+            );
+        }
+    }
+    $stmt_titulo->close();
+    // --- Fim notificação ---
+
     $retorno["status"] = "ok";
     $retorno["mensagem"] = "Formulário vinculado ao cliente com sucesso.";
     $retorno["data"] = [
         "checklist_id" => $checklist_id,
-        "cliente_id" => $cliente_id
+        "cliente_id"   => $cliente_id
     ];
 } catch (Exception $e) {
     $conexao->rollback();

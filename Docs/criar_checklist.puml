@@ -1,0 +1,167 @@
+@startuml criar_checklist
+
+' ── Configurações visuais ──
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 200
+
+skinparam participant {
+  BackgroundColor White
+  BorderColor #555
+  FontName Inter
+  FontSize 11
+}
+
+skinparam actor {
+  BackgroundColor White
+  BorderColor #333
+  FontName Inter
+  FontSize 11
+}
+
+skinparam sequence {
+  ArrowColor #222
+  ArrowFontColor #444
+  ArrowFontSize 10
+  LifeLineBorderColor #888
+  LifeLineBackgroundColor #f5f5f5
+
+  GroupBackgroundColor #f3f4f6
+  GroupBorderColor #9ca3af
+  GroupFontColor #111
+  GroupHeaderFontColor #111
+
+  DividerBackgroundColor #e5e7eb
+  DividerBorderColor #9ca3af
+  DividerFontColor #555
+
+  BoxBackgroundColor #f9fafb
+  BoxBorderColor #d1d5db
+  BoxFontColor #374151
+}
+
+skinparam note {
+  BackgroundColor #fffde7
+  BorderColor #aaa
+  FontSize 10
+  FontColor #555
+}
+
+' ── Agrupamento por camadas ──
+box "Presentation" #EFF6FF
+  actor ":Prestador" as P
+  participant ":ChecklistController\n«controller»" as CC #DBEAFE
+end box
+
+box "Business Layer" #F0FDF4
+  participant ":ChecklistService\n«service»" as CS #DCFCE7
+  participant ":ClienteService\n«service»" as CLS #DCFCE7
+end box
+
+box "Data Layer" #FEFCE8
+  participant ":ChecklistRepository\n«repository»" as CR #FEF9C3
+end box
+
+box "Infrastructure" #FDF4FF
+  participant ":EmailService\n«component»" as ES #EDE9FE
+end box
+
+' ──────────────────────────────────────────────
+' INÍCIO DO FLUXO
+' ──────────────────────────────────────────────
+
+P -> CC : 1: criarChecklist(ChecklistDTO)
+activate CC
+
+CC -> CS : 1.1: criarChecklist(dto: ChecklistDTO)
+activate CS
+
+note right of CS
+  [valida: usuario_tipo ≠ "client"]
+  [valida: perm_criar_projetos = true]
+  [valida: agenciaId presente na sessão]
+  [linkHash = UUID.randomUUID().toString()]
+end note
+
+' <<create>> Checklist entity
+create "checklist:Checklist" as CH
+CS --> CH : <<create>>\n1.1.1: new Checklist(agenciaId, titulo,\n         descricao, linkHash)
+
+' Persiste o checklist
+CS -> CR : 1.1.2: checklistRepository.save(checklist)
+activate CR
+CR --> CS : Checklist(id=gerado)
+deactivate CR
+
+' Loop de itens
+loop para cada ItemChecklistDTO em dto.itens
+
+  note right of CS
+    item = new ItemChecklist(checklist,
+           nome, tipo, regras)
+  end note
+
+  CS -> CR : 1.1.3: itemRepository.save(item)
+  activate CR
+  CR --> CS : ItemChecklist(id)
+  deactivate CR
+
+end
+
+' Opt: buscar ou criar cliente
+opt buscar ou criar Cliente (email + agenciaId)
+
+  CS -> CLS : 1.1.4: buscarOuCriar(email, agenciaId)
+  activate CLS
+
+  CLS -> CR : 1.1.4.1: findByEmailAndAgencia(email, id)
+  activate CR
+  CR --> CLS : Optional<Cliente>
+  deactivate CR
+
+  alt cliente não encontrado
+
+    note right of CLS
+      cliente = new Cliente(email, agenciaId)
+    end note
+
+    CLS -> CR : 1.1.4.2: clienteRepository.save(cliente)
+    activate CR
+    CR --> CLS : Cliente(id)
+    deactivate CR
+
+  end
+
+  CLS --> CS : Cliente(id, email)
+  deactivate CLS
+
+end
+
+' Vincula cliente ao checklist
+note right of CS
+  checklist.setCliente(cliente)
+end note
+
+CS -> CR : 1.1.5: checklistRepository.save(checklist)
+activate CR
+CR --> CS : Checklist(clienteId atualizado)
+deactivate CR
+
+' Envia e-mail de convite
+CS -> ES : <<create>>\n1.1.6: enviarConvite(email,\n         linkHash, itens)
+activate ES
+
+ES -> ES : configurarMensagem(template HTML)
+ES -> ES : smtpClient.send() via Gmail SMTP
+
+ES --> CS : emailEnviado: true
+deactivate ES
+
+' Retornos
+CS --> CC : ChecklistResponseDTO\n(checklist_id, link_hash)
+deactivate CS
+
+CC --> P : ResponseEntity<ChecklistResponseDTO>\n201 Created
+deactivate CC
+
+@enduml

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- TÍTULO -->
+    <mxCell id="title"
+      value="Diagrama de Máquina de Estados — Checklist (ClientFlow)"
+      style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;
+             whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#111111;fontFamily=Inter;"
+      vertex="1" parent="1">
+      <mxGeometry x="234" y="20" width="700" height="36" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--  ESTADO INICIAL                        -->
+    <!-- ══════════════════════════════════════ -->
+    <mxCell id="initial" value=""
+      style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;
+             fillColor=#222222;strokeColor=#222222;"
+      vertex="1" parent="1">
+      <mxGeometry x="569" y="76" width="28" height="28" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--  EM CRIAÇÃO                            -->
+    <!-- ══════════════════════════════════════ -->
+    <mxCell id="em_criacao"
+      value="&lt;b&gt;Em Criação&lt;/b&gt;&lt;hr/&gt;
+             entry / Agência preenche título, itens&lt;br/&gt;e e-mail do cliente&lt;br/&gt;
+             do / Validações de formulário"
+      style="rounded=1;whiteSpace=wrap;html=1;
+             fillColor=#ffffff;strokeColor=#555555;
+             fontColor=#111111;fontFamily=Inter;fontSize=10;
+             verticalAlign=top;arcSize=6;"
+      vertex="1" parent="1">
+      <mxGeometry x="474" y="136" width="220" height="95" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--  PENDENTE                              -->
+    <!-- ══════════════════════════════════════ -->
+    <mxCell id="pendente"
+      value="&lt;b&gt;Pendente&lt;/b&gt;&lt;hr/&gt;
+             entry / Checklist gravado no BD&lt;br/&gt;
+             entry / E-mail de convite enviado&lt;br/&gt;
+             do / Aguarda envio dos itens pelo cliente&lt;br/&gt;
+             [status = &#39;pending&#39;]"
+      style="rounded=1;whiteSpace=wrap;html=1;
+             fillColor=#ffffff;strokeColor=#555555;
+             fontColor=#111111;fontFamily=Inter;fontSize=10;
+             verticalAlign=top;arcSize=6;"
+      vertex="1" parent="1">
+      <mxGeometry x="474" y="277" width="220" height="110" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--  EM REVISÃO                            -->
+    <!-- ══════════════════════════════════════ -->
+    <mxCell id="em_revisao"
+      value="&lt;b&gt;Em Revisão&lt;/b&gt;&lt;hr/&gt;
+             entry / Notificação à agência&lt;br/&gt;
+             do / Agência revisa cada item&lt;br/&gt;
+             (aprova ou reprova)&lt;br/&gt;
+             [status = &#39;in_review&#39;]"
+      style="rounded=1;whiteSpace=wrap;html=1;
+             fillColor=#ffffff;strokeColor=#555555;
+             fontColor=#111111;fontFamily=Inter;fontSize=10;
+             verticalAlign=top;arcSize=6;"
+      vertex="1" parent="1">
+      <mxGeometry x="474" y="441" width="220" height="110" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--  CORREÇÃO NECESSÁRIA                   -->
+    <!-- ══════════════════════════════════════ -->
+    <mxCell id="reprovado"
+      value="&lt;b&gt;Correção Necessária&lt;/b&gt;&lt;hr/&gt;
+             entry / Motivo de reprovação registrado&lt;br/&gt;
+             do / Cliente corrige e reenvia o item&lt;br/&gt;
+             [status = &#39;rejected&#39;]"
+      style="rounded=1;whiteSpace=wrap;html=1;
+             fillColor=#ffffff;strokeColor=#555555;
+             fontColor=#111111;fontFamily=Inter;fontSize=10;
+             verticalAlign=top;arcSize=6;"
+      vertex="1" parent="1">
+      <mxGeometry x="200" y="441" width="220" height="100" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--  CONCLUÍDO                             -->
+    <!-- ══════════════════════════════════════ -->
+    <mxCell id="concluido"
+      value="&lt;b&gt;Concluído&lt;/b&gt;&lt;hr/&gt;
+             entry / Todos os itens aprovados&lt;br/&gt;
+             do / Checklist encerrado com sucesso&lt;br/&gt;
+             exit / Dados disponíveis para a agência&lt;br/&gt;
+             [status = &#39;completed&#39;]"
+      style="rounded=1;whiteSpace=wrap;html=1;
+             fillColor=#ffffff;strokeColor=#555555;
+             fontColor=#111111;fontFamily=Inter;fontSize=10;
+             verticalAlign=top;arcSize=6;"
+      vertex="1" parent="1">
+      <mxGeometry x="474" y="608" width="220" height="110" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--  ENCERRADO                             -->
+    <!-- ══════════════════════════════════════ -->
+    <mxCell id="encerrado"
+      value="&lt;b&gt;Encerrado&lt;/b&gt;&lt;hr/&gt;
+             entry / Checklist desativado manualmente&lt;br/&gt;
+             do / Nenhuma ação permitida&lt;br/&gt;
+             [status = &#39;Encerrado&#39;]"
+      style="rounded=1;whiteSpace=wrap;html=1;
+             fillColor=#f5f5f5;strokeColor=#555555;
+             fontColor=#444444;fontFamily=Inter;fontSize=10;
+             verticalAlign=top;arcSize=6;"
+      vertex="1" parent="1">
+      <mxGeometry x="760" y="441" width="220" height="100" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--  ESTADO FINAL                          -->
+    <!-- ══════════════════════════════════════ -->
+    <mxCell id="final" value=""
+      style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;
+             fillColor=#222222;strokeColor=#222222;double=1;"
+      vertex="1" parent="1">
+      <mxGeometry x="569" y="765" width="28" height="28" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--  TRANSIÇÕES                            -->
+    <!-- ══════════════════════════════════════ -->
+
+    <!-- Inicial → Em Criação -->
+    <mxCell id="t01" value=""
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+             entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+             strokeColor=#222222;strokeWidth=2;
+             fontFamily=Inter;fontSize=9;fontColor=#444444;"
+      edge="1" source="initial" target="em_criacao" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Em Criação → Pendente -->
+    <mxCell id="t12"
+      value="[Dados válidos] / criarChecklist(dto)"
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+             entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+             strokeColor=#222222;strokeWidth=1.5;
+             fontFamily=Inter;fontSize=9;fontColor=#444444;"
+      edge="1" source="em_criacao" target="pendente" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Em Criação → Em Criação (loop — dados inválidos) -->
+    <mxCell id="t11"
+      value="[Dados inválidos] / Erro de validação"
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;
+             entryX=1;entryY=0;entryDx=0;entryDy=0;
+             strokeColor=#888888;strokeWidth=1;dashed=1;
+             fontFamily=Inter;fontSize=9;fontColor=#444444;"
+      edge="1" source="em_criacao" target="em_criacao" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="744" y="183" />
+          <mxPoint x="744" y="136" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Pendente → Em Revisão -->
+    <mxCell id="t23"
+      value="[≥1 item enviado pelo cliente]&lt;br/&gt;enviarTarefa(item_id) / item.status=&#39;review&#39;"
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+             entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+             strokeColor=#222222;strokeWidth=1.5;
+             fontFamily=Inter;fontSize=9;fontColor=#444444;"
+      edge="1" source="pendente" target="em_revisao" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Pendente → Encerrado -->
+    <mxCell id="t2enc"
+      value="[Agência cancela] / deletarChecklist()"
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;
+             entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+             strokeColor=#888888;strokeWidth=1;dashed=1;
+             fontFamily=Inter;fontSize=9;fontColor=#444444;"
+      edge="1" source="pendente" target="encerrado" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="870" y="332" />
+          <mxPoint x="870" y="441" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Em Revisão → Correção Necessária -->
+    <mxCell id="t34"
+      value="[≥1 item reprovado]&lt;br/&gt;revisarItem(acao=&#39;reprovar&#39;)"
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;
+             entryX=1;entryY=0.5;entryDx=0;entryDy=0;
+             strokeColor=#222222;strokeWidth=1.5;
+             fontFamily=Inter;fontSize=9;fontColor=#444444;"
+      edge="1" source="em_revisao" target="reprovado" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Correção Necessária → Em Revisão -->
+    <mxCell id="t43"
+      value="[Cliente corrige e reenvia]&lt;br/&gt;enviarTarefa(item_id) / item.status=&#39;review&#39;"
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=1;exitY=0.3;exitDx=0;exitDy=0;
+             entryX=0;entryY=0.3;entryDx=0;entryDy=0;
+             strokeColor=#222222;strokeWidth=1.5;
+             fontFamily=Inter;fontSize=9;fontColor=#444444;"
+      edge="1" source="reprovado" target="em_revisao" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="420" y="471" />
+          <mxPoint x="474" y="471" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- Em Revisão → Concluído -->
+    <mxCell id="t35"
+      value="[Todos os itens aprovados]&lt;br/&gt;revisarItem(acao=&#39;aprovar&#39;) / atualizar_status_checklist()"
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+             entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+             strokeColor=#222222;strokeWidth=1.5;
+             fontFamily=Inter;fontSize=9;fontColor=#444444;"
+      edge="1" source="em_revisao" target="concluido" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Em Revisão → Encerrado -->
+    <mxCell id="t3enc"
+      value="[Agência encerra] / deletarChecklist()"
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;
+             entryX=0;entryY=0.5;entryDx=0;entryDy=0;
+             strokeColor=#888888;strokeWidth=1;dashed=1;
+             fontFamily=Inter;fontSize=9;fontColor=#444444;"
+      edge="1" source="em_revisao" target="encerrado" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Concluído → Final -->
+    <mxCell id="t5f" value=""
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+             entryX=0.5;entryY=0;entryDx=0;entryDy=0;
+             strokeColor=#222222;strokeWidth=2;"
+      edge="1" source="concluido" target="final" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Encerrado → Final -->
+    <mxCell id="t6f" value=""
+      style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;
+             jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;
+             entryX=1;entryY=1;entryDx=0;entryDy=0;
+             strokeColor=#888888;strokeWidth=1;dashed=1;"
+      edge="1" source="encerrado" target="final" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="870" y="579" />
+          <mxPoint x="870" y="793" />
+          <mxPoint x="597" y="793" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

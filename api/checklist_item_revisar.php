@@ -1,5 +1,6 @@
 <?php
 include_once("db_conexao.php");
+include_once("notificacao_criar_helper.php");
 session_start();
 
 $retorno = [
@@ -102,11 +103,90 @@ $stmt_update->bind_param("ssi", $novo_status, $novo_motivo, $item_id);
 
 if ($stmt_update->execute()) {
     atualizar_status_checklist($conexao, $checklist_id_revisar);
+
+    // --- Notificações: aviso ao cliente sobre o item revisado ---
+    // Busca dados do checklist, cliente e agencia
+    $stmt_info = $conexao->prepare(
+        "SELECT ch.titulo, ch.agencia_id, ch.cliente_id,
+                u.id AS usuario_cliente_id, u.nome AS cliente_nome
+         FROM checklists ch
+         LEFT JOIN clientes cl ON cl.id = ch.cliente_id
+         LEFT JOIN usuarios u  ON u.id  = cl.usuario_id
+         WHERE ch.id = ? LIMIT 1"
+    );
+    $stmt_info->bind_param("i", $checklist_id_revisar);
+    $stmt_info->execute();
+    $info_res = $stmt_info->get_result();
+
+    if ($info_res->num_rows > 0) {
+        $info = $info_res->fetch_assoc();
+        $titulo_ch         = $info['titulo'];
+        $agencia_id_notif  = intval($info['agencia_id']);
+        $usuario_cliente   = $info['usuario_cliente_id'] ? intval($info['usuario_cliente_id']) : null;
+        $link_ch           = "public/pages/dashboard_client.html";
+
+        if ($usuario_cliente) {
+            if ($acao === 'aprovar') {
+                criar_notificacao(
+                    $conexao, $usuario_cliente,
+                    'item_aprovado',
+                    "✅ Item aprovado!",
+                    "Um item seu foi aprovado no projeto \"{$titulo_ch}\". Continue enviando os demais!",
+                    $link_ch
+                );
+            } else {
+                criar_notificacao(
+                    $conexao, $usuario_cliente,
+                    'item_reprovado',
+                    "🔄 Item devolvido para correção",
+                    "Um item do projeto \"{$titulo_ch}\" precisou ser corrigido. Motivo: {$motivo}",
+                    $link_ch
+                );
+            }
+        }
+
+        // Verifica se todos os itens foram aprovados (checklist concluído)
+        $stmt_concluido = $conexao->prepare(
+            "SELECT COUNT(*) as total,
+                    SUM(status = 'approved') as aprovados
+             FROM itens_checklist WHERE checklist_id = ?"
+        );
+        $stmt_concluido->bind_param("i", $checklist_id_revisar);
+        $stmt_concluido->execute();
+        $row_c = $stmt_concluido->get_result()->fetch_assoc();
+        $stmt_concluido->close();
+
+        if (intval($row_c['total']) > 0 && intval($row_c['aprovados']) === intval($row_c['total'])) {
+            // Notifica o cliente
+            if ($usuario_cliente) {
+                criar_notificacao(
+                    $conexao, $usuario_cliente,
+                    'checklist_concluido',
+                    "🎉 Projeto concluído!",
+                    "Todos os itens do projeto \"{$titulo_ch}\" foram aprovados. Parabéns!",
+                    $link_ch
+                );
+            }
+            // Notifica todos os membros da agência
+            criar_notificacoes_agencia(
+                $conexao,
+                $agencia_id_notif,
+                $checklist_id_revisar,
+                'checklist_concluido',
+                "🎉 Projeto concluído!",
+                "Todos os itens do projeto \"{$titulo_ch}\" foram aprovados pelo cliente.",
+                "public/pages/checklist_details.html?id={$checklist_id_revisar}"
+            );
+        }
+    }
+    $stmt_info->close();
+    // --- Fim notificações ---
+
     $retorno["status"] = "ok";
     $retorno["mensagem"] = $acao === "aprovar" ? "Item aprovado." : "Item reprovado e devolvido ao cliente.";
     $retorno["data"] = [
         "item_id" => $item_id,
-        "status" => $novo_status
+        "status"  => $novo_status
     ];
 } else {
     $retorno["mensagem"] = "Erro ao revisar item.";

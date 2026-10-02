@@ -1,5 +1,6 @@
 <?php
 include_once("db_conexao.php");
+include_once("notificacao_criar_helper.php");
 session_start();
 
 $retorno = [
@@ -275,6 +276,39 @@ $stmt_update->bind_param("ssi", $resposta_texto, $arquivo_path, $item_id);
 
 if ($stmt_update->execute()) {
     atualizar_status_checklist($conexao, $checklist_id);
+
+    // --- Notificação: cliente enviou item para revisão ---
+    // Busca nome do cliente e título do checklist
+    $stmt_notif_info = $conexao->prepare(
+        "SELECT u.nome AS cliente_nome, ch.titulo AS checklist_titulo, ch.agencia_id
+         FROM checklists ch
+         LEFT JOIN clientes cl ON cl.id = ch.cliente_id
+         LEFT JOIN usuarios u ON u.id = cl.usuario_id
+         WHERE ch.id = ? LIMIT 1"
+    );
+    $stmt_notif_info->bind_param("i", $checklist_id);
+    $stmt_notif_info->execute();
+    $info_res = $stmt_notif_info->get_result();
+    if ($info_res->num_rows > 0) {
+        $info = $info_res->fetch_assoc();
+        $nome_cliente_notif  = $info['cliente_nome'] ?: 'O cliente';
+        $titulo_checklist    = $info['checklist_titulo'];
+        $agencia_id_notif    = intval($info['agencia_id']);
+        $link_notif          = "public/pages/checklist_details.html?id={$checklist_id}";
+
+        criar_notificacoes_agencia(
+            $conexao,
+            $agencia_id_notif,
+            $checklist_id,
+            'item_enviado',
+            "📋 Item enviado para revisão",
+            "{$nome_cliente_notif} enviou um item para revisão no projeto \"{$titulo_checklist}\".",
+            $link_notif
+        );
+    }
+    $stmt_notif_info->close();
+    // --- Fim notificação ---
+
     $retorno["status"] = "ok";
     $retorno["mensagem"] = "Item enviado com sucesso.";
     $retorno["data"] = ["item_id" => $item_id, "status" => "review"];

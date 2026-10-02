@@ -2971,3 +2971,402 @@ a:hover {
 }
 .char-now.char-warn { color: #f59e0b; font-weight: 700; }
 .char-min-hint { color: #94a3b8; }
+
+/* =============================================================
+   SISTEMA DE NOTIFICAÇÕES IN-APP — ClientFlow
+   ============================================================= */
+
+/* ── Wrapper no topbar ── */
+.cf-notif-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Botão do sino ── */
+.cf-notif-bell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(79, 70, 229, 0.18);
+  background: rgba(255, 255, 255, 0.85);
+  color: #4f46e5;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+  font-size: 1rem;
+}
+
+.cf-notif-bell:hover {
+  background: rgba(79, 70, 229, 0.08);
+  border-color: rgba(79, 70, 229, 0.38);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.16);
+}
+
+.cf-notif-bell.active {
+  background: rgba(79, 70, 229, 0.1);
+  border-color: rgba(79, 70, 229, 0.5);
+  color: #4f46e5;
+}
+
+/* Animação de sino quando há novas notificações */
+.cf-notif-bell:has(.cf-notif-badge:not([style*="display: none"])) i {
+  animation: cf-bell-swing 0.6s ease-in-out;
+  transform-origin: top center;
+}
+
+@keyframes cf-bell-swing {
+  0%   { transform: rotate(0deg); }
+  20%  { transform: rotate(15deg); }
+  40%  { transform: rotate(-12deg); }
+  60%  { transform: rotate(8deg); }
+  80%  { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* ── Badge de contagem ── */
+.cf-notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  line-height: 1;
+  animation: cf-badge-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.45);
+}
+
+@keyframes cf-badge-pop {
+  0%   { transform: scale(0); }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* ── Dropdown de notificações ── */
+.cf-notif-dropdown {
+  position: fixed;
+  width: 360px;
+  max-height: 520px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 6px rgba(0,0,0,0.04),
+    0 12px 40px rgba(0,0,0,0.14),
+    0 0 0 1px rgba(0,0,0,0.06);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.97);
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cf-notif-dropdown.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+/* Header do dropdown */
+.cf-notif-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.cf-notif-dropdown-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cf-notif-mark-all-btn {
+  font-size: 0.75rem;
+  color: #4f46e5;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+
+.cf-notif-mark-all-btn:hover {
+  background: rgba(79, 70, 229, 0.08);
+  color: #3730a3;
+}
+
+.cf-notif-mark-all-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Lista scrollável */
+.cf-notif-list {
+  overflow-y: auto;
+  flex: 1;
+  overscroll-behavior: contain;
+}
+
+.cf-notif-list::-webkit-scrollbar {
+  width: 4px;
+}
+.cf-notif-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cf-notif-list::-webkit-scrollbar-thumb {
+  background: rgba(79, 70, 229, 0.2);
+  border-radius: 99px;
+}
+
+/* Estado vazio */
+.cf-notif-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  color: #94a3b8;
+  gap: 12px;
+  text-align: center;
+}
+
+.cf-notif-empty i {
+  font-size: 2.2rem;
+  opacity: 0.45;
+}
+
+.cf-notif-empty p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ── Item de notificação ── */
+.cf-notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  transition: background 0.15s ease;
+  position: relative;
+}
+
+.cf-notif-item:last-child {
+  border-bottom: none;
+}
+
+.cf-notif-item:hover {
+  background: rgba(79, 70, 229, 0.04);
+}
+
+.cf-notif-item.nao-lida {
+  background: rgba(79, 70, 229, 0.045);
+}
+
+.cf-notif-item.nao-lida:hover {
+  background: rgba(79, 70, 229, 0.08);
+}
+
+/* Ícone colorido por tipo */
+.cf-notif-item-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
+.cf-notif-item-icon.item_enviado       { background: rgba(79,70,229,0.1);  color: #4f46e5; }
+.cf-notif-item-icon.item_aprovado      { background: rgba(16,185,129,0.1); color: #059669; }
+.cf-notif-item-icon.item_reprovado     { background: rgba(239,68,68,0.1);  color: #dc2626; }
+.cf-notif-item-icon.checklist_concluido{ background: rgba(245,158,11,0.1); color: #d97706; }
+.cf-notif-item-icon.nova_mensagem      { background: rgba(99,102,241,0.1); color: #6366f1; }
+.cf-notif-item-icon.vinculado_projeto  { background: rgba(14,165,233,0.1); color: #0284c7; }
+.cf-notif-item-icon.novo_projeto_criado{ background: rgba(168,85,247,0.1); color: #7c3aed; }
+
+/* Corpo do item */
+.cf-notif-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cf-notif-item-title {
+  margin: 0 0 2px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cf-notif-item.lida .cf-notif-item-title {
+  font-weight: 500;
+  color: #475569;
+}
+
+.cf-notif-item-msg {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cf-notif-item-time {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Bolinha de não lida */
+.cf-notif-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4f46e5;
+  flex-shrink: 0;
+  margin-top: 6px;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.2);
+}
+
+/* ── Dark mode: sino ── */
+[data-theme="dark"] .cf-notif-bell {
+  background: var(--dk-elevated);
+  border-color: var(--dk-border-strong);
+  color: #818cf8;
+}
+
+[data-theme="dark"] .cf-notif-bell:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+[data-theme="dark"] .cf-notif-bell.active {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #a5b4fc;
+}
+
+[data-theme="dark"] .cf-notif-badge {
+  border-color: var(--dk-elevated);
+}
+
+/* ── Dark mode: dropdown ── */
+[data-theme="dark"] .cf-notif-dropdown {
+  background: var(--dk-surface);
+  box-shadow:
+    0 4px 6px rgba(0,0,0,0.2),
+    0 16px 48px rgba(0,0,0,0.45),
+    0 0 0 1px var(--dk-border);
+}
+
+[data-theme="dark"] .cf-notif-dropdown-header {
+  border-bottom-color: var(--dk-border);
+}
+
+[data-theme="dark"] .cf-notif-dropdown-title {
+  color: #f0f4f8;
+}
+
+[data-theme="dark"] .cf-notif-mark-all-btn {
+  color: #818cf8;
+}
+
+[data-theme="dark"] .cf-notif-mark-all-btn:hover {
+  background: rgba(129, 140, 248, 0.1);
+  color: #a5b4fc;
+}
+
+[data-theme="dark"] .cf-notif-item {
+  border-bottom-color: var(--dk-border);
+}
+
+[data-theme="dark"] .cf-notif-item:hover {
+  background: rgba(99, 102, 241, 0.07);
+}
+
+[data-theme="dark"] .cf-notif-item.nao-lida {
+  background: rgba(99, 102, 241, 0.06);
+}
+
+[data-theme="dark"] .cf-notif-item.nao-lida:hover {
+  background: rgba(99, 102, 241, 0.12);
+}
+
+[data-theme="dark"] .cf-notif-item-title {
+  color: #f0f4f8;
+}
+
+[data-theme="dark"] .cf-notif-item.lida .cf-notif-item-title {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .cf-notif-item-msg {
+  color: #8899aa;
+}
+
+[data-theme="dark"] .cf-notif-item-time {
+  color: #64748b;
+}
+
+[data-theme="dark"] .cf-notif-empty {
+  color: #475569;
+}
+
+[data-theme="dark"] .cf-notif-unread-dot {
+  background: #818cf8;
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
+}
+
+[data-theme="dark"] .cf-notif-item-icon.item_enviado       { background: rgba(99,102,241,0.15);  color: #a5b4fc; }
+[data-theme="dark"] .cf-notif-item-icon.item_aprovado      { background: rgba(16,185,129,0.15);  color: #6ee7b7; }
+[data-theme="dark"] .cf-notif-item-icon.item_reprovado     { background: rgba(239,68,68,0.15);   color: #fca5a5; }
+[data-theme="dark"] .cf-notif-item-icon.checklist_concluido{ background: rgba(245,158,11,0.15);  color: #fcd34d; }
+[data-theme="dark"] .cf-notif-item-icon.nova_mensagem      { background: rgba(129,140,248,0.15); color: #c4b5fd; }
+[data-theme="dark"] .cf-notif-item-icon.vinculado_projeto  { background: rgba(14,165,233,0.15);  color: #7dd3fc; }
+[data-theme="dark"] .cf-notif-item-icon.novo_projeto_criado{ background: rgba(168,85,247,0.15);  color: #d8b4fe; }
+
+/* ── Responsivo mobile ── */
+@media (max-width: 480px) {
+  .cf-notif-dropdown {
+    width: calc(100vw - 16px);
+    left: 8px !important;
+    right: 8px;
+    max-height: 70vh;
+  }
+}
+

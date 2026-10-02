@@ -1,5 +1,6 @@
 <?php
 include_once("db_conexao.php");
+include_once("notificacao_criar_helper.php");
 session_start();
 
 $retorno = [
@@ -96,13 +97,70 @@ $stmt = $conexao->prepare("
 $stmt->bind_param("iis", $checklist_id, $usuario_id, $mensagem);
 if ($stmt->execute()) {
     $mensagem_id = $conexao->insert_id;
+
+    // --- Notificação de chat ---
+    // Busca dados do checklist para saber agencia_id e cliente
+    $stmt_ch = $conexao->prepare(
+        "SELECT ch.titulo, ch.agencia_id,
+                u.id  AS usuario_cliente_id, u.nome AS cliente_nome
+         FROM checklists ch
+         LEFT JOIN clientes cl ON cl.id  = ch.cliente_id
+         LEFT JOIN usuarios u  ON u.id   = cl.usuario_id
+         WHERE ch.id = ? LIMIT 1"
+    );
+    $stmt_ch->bind_param("i", $checklist_id);
+    $stmt_ch->execute();
+    $ch_res = $stmt_ch->get_result();
+
+    if ($ch_res->num_rows > 0) {
+        $ch_info          = $ch_res->fetch_assoc();
+        $titulo_ch        = $ch_info['titulo'];
+        $agencia_id_chat  = intval($ch_info['agencia_id']);
+        $uid_cliente      = $ch_info['usuario_cliente_id'] ? intval($ch_info['usuario_cliente_id']) : null;
+        $link_chat        = "public/pages/checklist_details.html?id={$checklist_id}";
+
+        if ($usuario_tipo === 'client') {
+            // Cliente enviou mensagem → notifica agencia
+            $stmt_remetente = $conexao->prepare("SELECT nome FROM usuarios WHERE id = ? LIMIT 1");
+            $stmt_remetente->bind_param("i", $usuario_id);
+            $stmt_remetente->execute();
+            $rem = $stmt_remetente->get_result()->fetch_assoc();
+            $stmt_remetente->close();
+            $nome_rem = $rem ? $rem['nome'] : 'O cliente';
+
+            criar_notificacoes_agencia(
+                $conexao,
+                $agencia_id_chat,
+                $checklist_id,
+                'nova_mensagem',
+                "💬 Nova mensagem no chat",
+                "{$nome_rem} enviou uma mensagem no projeto \"{$titulo_ch}\".",
+                $link_chat
+            );
+        } else {
+            // Agência enviou mensagem → notifica cliente
+            if ($uid_cliente) {
+                criar_notificacao(
+                    $conexao,
+                    $uid_cliente,
+                    'nova_mensagem',
+                    "💬 Nova mensagem no chat",
+                    "Sua agência enviou uma mensagem no projeto \"{$titulo_ch}\".",
+                    $link_chat
+                );
+            }
+        }
+    }
+    $stmt_ch->close();
+    // --- Fim notificação de chat ---
+
     $retorno["status"] = "ok";
     $retorno["mensagem"] = "Mensagem enviada com sucesso.";
     $retorno["data"] = [
-        "id" => $mensagem_id,
-        "checklist_id" => $checklist_id,
+        "id"                   => $mensagem_id,
+        "checklist_id"         => $checklist_id,
         "remetente_usuario_id" => $usuario_id,
-        "mensagem" => $mensagem
+        "mensagem"             => $mensagem
     ];
 } else {
     $retorno["mensagem"] = "Erro ao enviar mensagem.";

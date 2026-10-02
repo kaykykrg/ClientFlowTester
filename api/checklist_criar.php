@@ -1,5 +1,6 @@
 <?php
 include_once("db_conexao.php");
+include_once("notificacao_criar_helper.php");
 session_start();
 require '../vendor/autoload.php';
 
@@ -195,6 +196,21 @@ try {
     $stmt_vinc->close();
 
     $conexao->commit();
+
+    // --- Notificação in-app: cliente já existente ---
+    // Se o cliente já tem conta (usuario_encontrado), cria notificação in-app
+    if ($usuario_encontrado && isset($usuario_encontrado['id'])) {
+        $uid_cliente_notif = intval($usuario_encontrado['id']);
+        criar_notificacao(
+            $conexao,
+            $uid_cliente_notif,
+            'novo_projeto_criado',
+            "📄 Novo projeto criado para você!",
+            "O projeto \"{$titulo}\" foi criado e está aguardando seus documentos. Acesse o link enviado por e-mail para começar.",
+            "public/pages/dashboard_client.html"
+        );
+    }
+    // --- Fim notificação ---
 
     $link_acesso  = "http://localhost/ClientFlow/public/pages/cadastro.html?token=" . $link_hash;
     $vencimento_fmt = $data_vencimento ? date("d/m/Y", strtotime($data_vencimento)) : null;

@@ -1,0 +1,136 @@
+@startuml checklist_item_estado
+title Máquina de Estados — Item do Checklist\n«Estado Submáquina: EmRevisao»
+
+skinparam DefaultFontName Inter
+skinparam DefaultFontSize 12
+skinparam BackgroundColor #F8FAFC
+skinparam ArrowColor #7C3AED
+skinparam ArrowFontColor #374151
+skinparam ArrowFontSize 11
+
+skinparam State {
+  BackgroundColor         #FFFFFF
+  BorderColor             #7C3AED
+  FontColor               #1E1B4B
+  FontName                Inter
+  FontSize                12
+  AttributeFontColor      #6B7280
+  AttributeFontSize       10
+  StartColor              #7C3AED
+  EndColor                #7C3AED
+  CompositeBackgroundColor #F5F3FF
+  CompositeBorderColor    #7C3AED
+}
+
+' ═══════════════════════════════════════════════
+'  ESTADO INICIAL DO ITEM
+' ═══════════════════════════════════════════════
+[*] --> Pendente
+
+state Pendente {
+  entry / registrarItemNoDB(status="pending")
+  exit  / validarBloqueio()
+}
+
+' ═══════════════════════════════════════════════
+'  SUBMÁQUINA — Em Envio pelo Cliente
+' ═══════════════════════════════════════════════
+state "EnviandoResposta\n«submáquina»" as EnviandoResposta {
+  entry / verificarPermissaoCliente()
+  exit  / liberarRecursosUpload()
+
+  [*]              --> IdentificandoTipo
+
+  state IdentificandoTipo {
+    entry / lerFormatoEsperado()
+    exit  / prepararContextoValidacao()
+    [*]            --> TipoTexto   : [formato = text | url | color]
+    [*]            --> TipoArquivo : [formato = file | image]
+  }
+
+  TipoTexto --> ValidandoTexto
+
+  state ValidandoTexto {
+    entry / ativarValidacaoTexto()
+    exit  / desativarValidacaoTexto()
+    [*]                --> ChecandoMinChars
+    ChecandoMinChars   --> ChecandoMaxChars  : [len >= min_chars | min_chars null]
+    ChecandoMaxChars   --> ChecandoURL       : [len <= max_chars | max_chars null]
+    ChecandoURL        --> TextoValido       : [tipo ≠ url | FILTER_VALIDATE_URL OK]
+    ChecandoMinChars   --> ErroTexto         : [len < min_chars]
+    ChecandoMaxChars   --> ErroTexto         : [len > max_chars]
+    ChecandoURL        --> ErroTexto         : [tipo = url && URL inválida]
+  }
+
+  TipoArquivo --> ValidandoArquivo
+
+  state "ValidandoArquivo\n«estado composto»" as ValidandoArquivo {
+    entry / lerMetadadosUpload()
+    exit  / fecharStreamArquivo()
+    [*]              --> ChecandoExtensao
+    ChecandoExtensao --> ChecandoTamanho : [ext in allowed_extensions]
+    ChecandoTamanho  --> ChecandoDimensao : [size <= max_file_size_kb | null]
+    ChecandoDimensao --> ArquivoValido   : [formato ≠ image | dimensoes OK]
+    ChecandoExtensao --> ErroArquivo     : [ext não permitida]
+    ChecandoTamanho  --> ErroArquivo     : [size > max_file_size_kb]
+    ChecandoDimensao --> ErroArquivo     : [width/height fora dos limites]
+  }
+
+  ValidandoTexto  --> [*] : [TextoValido] / salvarRespostaTexto()
+  ValidandoTexto  --> [*] : [ErroTexto]   / retornarErroValidacao()
+  ValidandoArquivo --> [*] : [ArquivoValido] / moveUploadedFile()
+  ValidandoArquivo --> [*] : [ErroArquivo]   / retornarErroValidacao()
+}
+
+Pendente        --> EnviandoResposta  : cliente envia resposta\n[status ≠ approved && status ≠ review]
+EnviandoResposta --> Pendente         : [ErroTexto | ErroArquivo]
+EnviandoResposta --> EmRevisao        : [resposta válida] / UPDATE status='review'
+
+' ═══════════════════════════════════════════════
+'  SUBMÁQUINA — Em Revisão pela Agência
+' ═══════════════════════════════════════════════
+state "EmRevisao\n«submáquina»" as EmRevisao {
+  entry / notificarAgenciaNovaEntrega()
+  exit  / atualizarStatusChecklist()
+
+  [*]         --> AguardandoRevisor
+
+  state AguardandoRevisor {
+    entry / exibirItemNoPainel()
+    exit  / registrarRevisorResponsavel()
+  }
+
+  AguardandoRevisor --> DecisaoRevisao : revisor abre o item
+
+  state DecisaoRevisao {
+    entry / carregarDadosEntrega()
+    exit  / registrarDataRevisao()
+    [*]   --> AnalisandoEntrega
+    AnalisandoEntrega --> Aprovando  : revisor clica "Aprovar"
+    AnalisandoEntrega --> Reprovando : revisor clica "Reprovar"
+  }
+
+  Aprovando --> [*]  : / UPDATE status='approved',\nmotivo_rejeicao=NULL
+  Reprovando --> [*] : [motivo informado]\n/ UPDATE status='rejected',\nmotivo_rejeicao=motivo
+}
+
+EmRevisao --> Aprovado  : [decisão = aprovar]
+EmRevisao --> Reprovado : [decisão = reprovar && motivo informado]
+
+' ═══════════════════════════════════════════════
+'  ESTADOS FINAIS DO ITEM
+' ═══════════════════════════════════════════════
+state Aprovado {
+  entry / bloquearEdicaoItem()
+  exit  / dispararVerificacaoChecklist()
+}
+
+state Reprovado {
+  entry / notificarClienteRejeicao()
+  exit  / habilitarReenvioItem()
+}
+
+Reprovado --> EnviandoResposta : cliente corrige e reenvia\n[status = rejected]
+Aprovado  --> [*]
+
+@enduml

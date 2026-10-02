@@ -54,6 +54,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
     FOREIGN KEY (plano_id) REFERENCES planos(id) ON DELETE SET NULL
 );
 
+
+
 CREATE TABLE IF NOT EXISTS usuarios_agencia (
     id INT AUTO_INCREMENT PRIMARY KEY,
     agencia_id INT NOT NULL,
@@ -234,3 +236,26 @@ ON DUPLICATE KEY UPDATE
     nome_plano = VALUES(nome_plano),
     limite_coletas = VALUES(limite_coletas),
     limite_armazenamento = VALUES(limite_armazenamento);
+
+-- ============================================================
+-- SISTEMA DE NOTIFICAÇÕES
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS notificacoes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    tipo VARCHAR(60) NOT NULL,
+    titulo VARCHAR(200) NOT NULL,
+    mensagem TEXT NOT NULL,
+    link VARCHAR(500) NULL,
+    lida TINYINT(1) DEFAULT 0,
+    email_enviado_em TIMESTAMP NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+-- Migração segura: adiciona coluna email_enviado_em se ainda não existir
+SET @col_email_env := (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'notificacoes' AND COLUMN_NAME = 'email_enviado_em');
+SET @ddl_email_env := IF(@col_email_env = 0, 'ALTER TABLE notificacoes ADD COLUMN email_enviado_em TIMESTAMP NULL AFTER lida', 'SELECT 1');
+PREPARE s_email_env FROM @ddl_email_env; EXECUTE s_email_env; DEALLOCATE PREPARE s_email_env;
+

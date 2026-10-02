@@ -34,6 +34,17 @@ $telefone     = trim($_POST['telefone'] ?? '');
 $site         = trim($_POST['site'] ?? '');
 $descricao    = trim($_POST['descricao'] ?? '');
 
+function mensagem_duplicidade_empresa(mysqli_sql_exception $e)
+{
+    $mensagem = strtolower($e->getMessage());
+
+    if (str_contains($mensagem, 'cnpj')) {
+        return 'Este CNPJ já está cadastrado em outra conta.';
+    }
+
+    return 'Dados já cadastrados. Verifique as informações informadas.';
+}
+
 if (empty($nome_empresa)) {
     $retorno["mensagem"] = "O nome da empresa é obrigatório.";
     header("Content-type: application/json;charset:utf-8");
@@ -46,11 +57,21 @@ $stmt = $conexao->prepare(
 );
 $stmt->bind_param("sssssi", $nome_empresa, $cnpj, $telefone, $site, $descricao, $agencia_id);
 
-if ($stmt->execute()) {
-    $retorno["status"]   = "ok";
-    $retorno["mensagem"] = "Dados da empresa atualizados com sucesso!";
-} else {
-    $retorno["mensagem"] = "Erro ao atualizar dados da empresa.";
+try {
+    if ($stmt->execute()) {
+        $retorno["status"]   = "ok";
+        $retorno["mensagem"] = "Dados da empresa atualizados com sucesso!";
+    } else {
+        $retorno["mensagem"] = ($stmt->errno == 1062)
+            ? mensagem_duplicidade_empresa(new mysqli_sql_exception($stmt->error, $stmt->errno))
+            : "Erro ao atualizar dados da empresa.";
+    }
+} catch (mysqli_sql_exception $e) {
+    if ($e->getCode() == 1062) {
+        $retorno["mensagem"] = mensagem_duplicidade_empresa($e);
+    } else {
+        $retorno["mensagem"] = "Erro ao atualizar dados da empresa.";
+    }
 }
 
 $stmt->close();

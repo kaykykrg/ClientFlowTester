@@ -1,0 +1,148 @@
+@startuml checklist_ciclo_vida
+title Máquina de Estados — Ciclo de Vida do Checklist\n«ClientFlow»
+
+skinparam DefaultFontName Inter
+skinparam DefaultFontSize 12
+skinparam BackgroundColor #F8FAFC
+skinparam ArrowColor #4F46E5
+skinparam ArrowFontColor #374151
+skinparam ArrowFontSize 11
+
+skinparam State {
+  BackgroundColor         #FFFFFF
+  BorderColor             #6366F1
+  FontColor               #1E1B4B
+  FontName                Inter
+  FontSize                12
+  AttributeFontColor      #6B7280
+  AttributeFontSize       10
+  StartColor              #4F46E5
+  EndColor                #4F46E5
+  CompositeBackgroundColor #EEF2FF
+  CompositeBorderColor    #4F46E5
+}
+
+' ═══════════════════════════════════════════════
+'  ESTADO INICIAL
+' ═══════════════════════════════════════════════
+[*] --> Autenticando
+
+' ═══════════════════════════════════════════════
+'  AUTENTICAÇÃO E AUTORIZAÇÃO
+' ═══════════════════════════════════════════════
+state Autenticando {
+  entry / verificarSessao()
+  exit  / registrarTentativaAcesso()
+  [*] --> ValidandoSessao
+  ValidandoSessao --> SessaoValida   : [usuario_id presente]
+  ValidandoSessao --> Rejeitado      : [usuario_id ausente]
+  SessaoValida    --> PermissaoOk    : [tipo ≠ "client" &&\nperm_criar_projetos = true]
+  SessaoValida    --> Rejeitado      : [tipo = "client" ||\nperm_criar_projetos = false]
+}
+
+Autenticando --> Rejeitado       : falha de autenticação
+Autenticando --> PreenchendoForm : autenticação bem-sucedida
+
+state Rejeitado {
+  entry / retornarErro401()
+  exit  / limparContextoSessao()
+}
+
+Rejeitado --> [*]
+
+' ═══════════════════════════════════════════════
+'  ESTADO COMPOSTO — Preenchendo Formulário
+' ═══════════════════════════════════════════════
+state "PreenchendoForm\n«estado composto»" as PreenchendoForm {
+  entry / inicializarFormularioVazio()
+  exit  / consolidarDadosDTO()
+
+  [*] --> InformandoDados
+
+  state InformandoDados {
+    entry / habilitarCamposObrigatorios()
+    exit  / desabilitarCamposObrigatorios()
+    [*] --> AguardandoTitulo
+    AguardandoTitulo   --> AguardandoEmail   : [titulo preenchido]
+    AguardandoEmail    --> AguardandoItens   : [email válido]
+    AguardandoItens    --> DadosCompletos    : [≥ 1 item adicionado]
+    DadosCompletos     --> AguardandoTitulo  : usuario limpa formulário
+  }
+
+  InformandoDados --> ValidandoEntrada : usuario clica "Criar"
+
+  state ValidandoEntrada {
+    entry / ativarIndicadorValidacao()
+    exit  / desativarIndicadorValidacao()
+    [*] --> ValidandoTitulo
+    ValidandoTitulo  --> ValidandoEmail  : [titulo não vazio]
+    ValidandoEmail   --> ValidandoItens  : [email válido FILTER_VALIDATE_EMAIL]
+    ValidandoItens   --> ValidacaoOk     : [count(itens) > 0]
+    ValidandoTitulo  --> ErroValidacao   : [titulo vazio]
+    ValidandoEmail   --> ErroValidacao   : [email inválido]
+    ValidandoItens   --> ErroValidacao   : [sem itens]
+  }
+
+  ValidandoEntrada --> InformandoDados   : [ErroValidacao] / exibirMensagemErro()
+  ValidandoEntrada --> [*]               : [ValidacaoOk]
+}
+
+PreenchendoForm --> ProcessandoCriacao : dados validados
+
+' ═══════════════════════════════════════════════
+'  PROCESSAMENTO — usa submáquina de persistência
+' ═══════════════════════════════════════════════
+state "ProcessandoCriacao\n«invoca SubmaquinaPersistencia»" as ProcessandoCriacao {
+  entry / iniciarTransacaoDB()
+  exit  / fecharConexaoDB()
+
+  [*] --> PersistindoChecklist
+  PersistindoChecklist --> PersistindoItens : [INSERT checklists OK]
+  PersistindoItens     --> ResolvendoCliente : [todos itens inseridos]
+  ResolvendoCliente    --> VinculandoCliente  : [cliente_id resolvido]
+  VinculandoCliente    --> CommitDB           : [UPDATE checklists SET cliente_id OK]
+  CommitDB             --> [*]               : commit()
+
+  PersistindoChecklist --> RollbackDB : [erro SQL]
+  PersistindoItens     --> RollbackDB : [erro SQL]
+  ResolvendoCliente    --> RollbackDB : [erro ao criar cliente]
+  VinculandoCliente    --> RollbackDB : [erro SQL]
+  RollbackDB           --> [*]        : rollback()
+}
+
+ProcessandoCriacao --> EnviandoConvite  : [commit OK]
+ProcessandoCriacao --> FalhouCriacao    : [rollback executado]
+
+state FalhouCriacao {
+  entry / registrarErroLog()
+  exit  / limparEstadoTransacao()
+}
+FalhouCriacao --> [*]
+
+' ═══════════════════════════════════════════════
+'  ENVIANDO CONVITE POR E-MAIL
+' ═══════════════════════════════════════════════
+state EnviandoConvite {
+  entry / montarTemplateHTML()
+  exit  / registrarTentativaEmail()
+  [*] --> ConfigurandoSMTP
+  ConfigurandoSMTP --> EnviandoEmail  : [SMTP configurado]
+  EnviandoEmail    --> EmailEnviado   : [send() OK]
+  EnviandoEmail    --> EmailFalhou    : [Exception PHPMailer]
+  EmailFalhou      --> [*]            : / error_log(falha) — checklist mantido
+  EmailEnviado     --> [*]
+}
+
+EnviandoConvite --> ChecklistCriado : convite processado
+
+' ═══════════════════════════════════════════════
+'  ESTADO FINAL — Checklist Ativo
+' ═══════════════════════════════════════════════
+state ChecklistCriado {
+  entry / retornarResponseCreated()
+  exit  / limparContextoRequest()
+}
+
+ChecklistCriado --> [*]
+
+@enduml

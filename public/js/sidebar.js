@@ -63,6 +63,11 @@ class SidebarManager {
             const bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(offcanvas);
             toggleBtn.addEventListener("click", () => bsOffcanvas.toggle());
         }
+
+        // Inicializa o sistema de notificações in-app
+        if (window.NotificationManager) {
+            window.NotificationManager.init();
+        }
     }
 
     static mountLayout() {
@@ -78,9 +83,11 @@ class SidebarManager {
                                 <i class="fas fa-layer-group me-2 text-primary"></i>ClientFlow
                             </span>
                         </div>
-                        <button type="button" class="btn p-0 border-0 bg-transparent app-avatar-btn" id="openProfileBtn" title="Meu Perfil">
-                            <img id="userAvatar" src="" alt="Avatar" class="app-avatar">
-                        </button>
+                        <div class="d-flex align-items-center gap-2" id="topbar-right">
+                            <button type="button" class="btn p-0 border-0 bg-transparent app-avatar-btn" id="openProfileBtn" title="Meu Perfil">
+                                <img id="userAvatar" src="" alt="Avatar" class="app-avatar">
+                            </button>
+                        </div>
                     </div>
                 </nav>
             `;

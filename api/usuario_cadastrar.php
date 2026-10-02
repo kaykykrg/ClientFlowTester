@@ -20,6 +20,7 @@ $contato_juridico_nome = trim($_POST['contato_juridico_nome'] ?? '');
 $contato_juridico_email = trim($_POST['contato_juridico_email'] ?? '');
 $contato_juridico_telefone = trim($_POST['contato_juridico_telefone'] ?? '');
 
+
 function normalizar_data_para_iso($valor)
 {
     $valor = trim($valor);
@@ -79,6 +80,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit();
 }
 
+
 $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
 $data_nascimento = normalizar_data_para_iso($data_nascimento);
@@ -91,6 +93,21 @@ if ($data_nascimento === false) {
 
 $conexao->begin_transaction();
 
+function mensagem_duplicidade(mysqli_sql_exception $e)
+{
+    $mensagem = strtolower($e->getMessage());
+
+    if (str_contains($mensagem, 'cnpj')) {
+        return 'Este CNPJ já está cadastrado. Utilize outro CNPJ ou atualize a conta existente.';
+    }
+
+    if (str_contains($mensagem, 'email')) {
+        return 'Este e-mail já está cadastrado. Utilize outro e-mail ou faça login na sua conta existente.';
+    }
+
+    return 'Registro já cadastrado. Verifique os dados informados e tente novamente.';
+}
+
 try {
     $tipo_db = ($tipo_normalizado === 'agency') ? 'agency_member' : $tipo_normalizado;
 
@@ -100,7 +117,7 @@ try {
     );
 
     $stmt->bind_param(
-        "sssssssss" ,
+        "sssssssss",
         $nome,
         $email,
         $senha_hash,
@@ -215,7 +232,7 @@ try {
 } catch (mysqli_sql_exception $e) {
     $conexao->rollback();
     if ($e->getCode() == 1062) {
-        $retorno["mensagem"] = "Este e-mail já está cadastrado. Utilize outro ou faça login na sua conta existente.";
+        $retorno["mensagem"] = mensagem_duplicidade($e);
     } else {
         $retorno["mensagem"] = $e->getMessage();
     }

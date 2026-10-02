@@ -1,0 +1,157 @@
+@startuml aplicar_checklist_cliente
+title Máquina de Estados — Aplicação do Checklist ao Cliente\n«Vincular Checklist via Link Único»
+
+skinparam DefaultFontName Inter
+skinparam DefaultFontSize 12
+skinparam BackgroundColor #F8FAFC
+skinparam ArrowColor #059669
+skinparam ArrowFontColor #374151
+skinparam ArrowFontSize 11
+
+skinparam State {
+  BackgroundColor         #FFFFFF
+  BorderColor             #059669
+  FontColor               #064E3B
+  FontName                Inter
+  FontSize                12
+  AttributeFontColor      #6B7280
+  AttributeFontSize       10
+  StartColor              #059669
+  EndColor                #059669
+  CompositeBackgroundColor #ECFDF5
+  CompositeBorderColor    #059669
+}
+
+' ═══════════════════════════════════════════════
+'  INÍCIO
+' ═══════════════════════════════════════════════
+[*] --> AcessandoLink
+
+' ═══════════════════════════════════════════════
+'  ESTADO COMPOSTO — Acessando Link
+' ═══════════════════════════════════════════════
+state "AcessandoLink\n«estado composto»" as AcessandoLink {
+  entry / capturarTokenURL()
+  exit  / registrarAcessoLink()
+
+  [*] --> ValidandoToken
+
+  state ValidandoToken {
+    entry / consultarHashNoDB()
+    exit  / liberarConsultaDB()
+    [*]             --> TokenValido    : [link_hash encontrado na tabela checklists]
+    [*]             --> TokenInvalido  : [link_hash não encontrado]
+  }
+
+  ValidandoToken --> [*] : [TokenValido]
+  ValidandoToken --> [*] : [TokenInvalido] / retornarErro404()
+}
+
+AcessandoLink --> LinkInvalido     : [TokenInvalido]
+AcessandoLink --> VerificandoAuth  : [TokenValido]
+
+state LinkInvalido {
+  entry / exibirMensagemLinkInvalido()
+  exit  / limparParametrosURL()
+}
+LinkInvalido --> [*]
+
+' ═══════════════════════════════════════════════
+'  VERIFICAÇÃO DE AUTENTICAÇÃO DO CLIENTE
+' ═══════════════════════════════════════════════
+state VerificandoAuth {
+  entry / verificarSessaoCliente()
+  exit  / salvarRedirectDestino()
+  [*]           --> Autenticado     : [usuario_tipo = "client"]
+  [*]           --> NaoAutenticado  : [sessão ausente]
+  [*]           --> SemPermissao    : [usuario_tipo ≠ "client"]
+}
+
+VerificandoAuth --> RedirecionandoLogin : [NaoAutenticado]
+VerificandoAuth --> AcessoNegado        : [SemPermissao]
+VerificandoAuth --> ResolvendoVinculo   : [Autenticado]
+
+state RedirecionandoLogin {
+  entry / armazenarTokenEmCookie()
+  exit  / redirecionarParaLogin()
+}
+RedirecionandoLogin --> ResolvendoVinculo : cliente faz login
+
+state AcessoNegado {
+  entry / retornarErro403()
+  exit  / limparSessao()
+}
+AcessoNegado --> [*]
+
+' ═══════════════════════════════════════════════
+'  ESTADO COMPOSTO — Resolvendo Vínculo
+' ═══════════════════════════════════════════════
+state "ResolvendoVinculo\n«estado composto»" as ResolvendoVinculo {
+  entry / iniciarTransacaoDB()
+  exit  / fecharConexaoDB()
+
+  [*] --> BuscandoClienteExistente
+
+  state BuscandoClienteExistente {
+    entry / consultarClientePorUsuarioEAgencia()
+    exit  / registrarResultadoBusca()
+    [*]          --> ClienteEncontrado  : [clientes WHERE usuario_id + agencia_id]
+    [*]          --> ClienteNaoExiste   : [resultado vazio]
+  }
+
+  ClienteNaoExiste --> CriandoCliente
+
+  state CriandoCliente {
+    entry / buscarSenhaHashDoUsuario()
+    exit  / confirmarInsercaoCliente()
+    [*]     --> InserindoCliente
+    InserindoCliente --> ClienteCriado  : [INSERT clientes OK]
+    InserindoCliente --> ErroCriacao    : [INSERT falhou]
+  }
+
+  ErroCriacao     --> RollbackDB
+  ClienteEncontrado --> VerificandoConflito
+  ClienteCriado   --> VerificandoConflito
+
+  state VerificandoConflito {
+    entry / lerClienteAtualDoChecklist()
+    exit  / liberarVerificacaoConflito()
+    [*]            --> SemConflito   : [cliente_atual = 0 || cliente_atual = cliente_id]
+    [*]            --> ComConflito   : [cliente_atual > 0 && cliente_atual ≠ cliente_id]
+  }
+
+  SemConflito     --> VinculandoDB
+  ComConflito     --> RollbackDB  : / throw Exception("Formulário já vinculado")
+
+  state VinculandoDB {
+    entry / prepararUpdateChecklist()
+    exit  / finalizarUpdate()
+    [*]    --> ExecutandoUpdate
+    ExecutandoUpdate --> CommitDB   : [UPDATE checklists SET cliente_id OK]
+    ExecutandoUpdate --> RollbackDB : [erro SQL]
+  }
+
+  CommitDB   --> [*] : commit()
+  RollbackDB --> [*] : rollback()
+}
+
+ResolvendoVinculo --> VinculoFalhou  : [RollbackDB executado]
+ResolvendoVinculo --> ChecklistVinculado : [CommitDB executado]
+
+state VinculoFalhou {
+  entry / retornarErro500()
+  exit  / limparEstadoTransacao()
+}
+VinculoFalhou --> [*]
+
+' ═══════════════════════════════════════════════
+'  CHECKLIST VINCULADO — Pronto para uso
+' ═══════════════════════════════════════════════
+state ChecklistVinculado {
+  entry / redirecionarParaPainelCliente()
+  exit  / marcarPrimeiroAcessoCompleto()
+}
+
+ChecklistVinculado --> [*]
+
+@enduml

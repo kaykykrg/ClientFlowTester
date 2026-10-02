@@ -15,6 +15,7 @@ if (empty($usuario_id)) {
 $nome = trim($_POST['nome'] ?? '');
 $telefone = trim($_POST['telefone'] ?? '');
 
+
 if (empty($nome)) {
     $retorno["mensagem"] = "O nome é obrigatório.";
     header("Content-type: application/json;charset:utf-8");

@@ -1,0 +1,69 @@
+@startuml checklist_classe
+
+title Máquina de Estados — Classe: Checklist\n«ClientFlow»
+
+skinparam DefaultFontName Inter
+skinparam DefaultFontSize 12
+skinparam BackgroundColor #F8FAFC
+skinparam ArrowColor #4F46E5
+skinparam ArrowFontColor #374151
+skinparam ArrowFontSize 11
+
+skinparam State {
+  BackgroundColor          #FFFFFF
+  BorderColor              #4F46E5
+  FontColor                #1E1B4B
+  FontName                 Inter
+  FontSize                 12
+  AttributeFontColor       #6B7280
+  AttributeFontSize        10
+  StartColor               #1E1B4B
+  EndColor                 #1E1B4B
+  CompositeBackgroundColor #EEF2FF
+  CompositeBorderColor     #4F46E5
+}
+
+[*] --> Pendente
+
+' ══════════════════════════════════════
+'  PENDENTE
+' ══════════════════════════════════════
+Pendente : entry / enviarEmailConviteCliente()
+Pendente : do    / aguardarVinculoCliente()
+Pendente : exit  / registrarVinculoRealizado()
+
+state "Pendente" as Pendente
+
+Pendente --> EmAndamento : cliente acessa link e vincula conta\n[link_hash valido && usuario_tipo = client]
+
+' ══════════════════════════════════════
+'  ESTADO COMPOSTO — Em Andamento
+' ══════════════════════════════════════
+EmAndamento : entry / notificarClienteItensDisponiveis()
+EmAndamento : do    / monitorarProgressoItens()
+EmAndamento : exit  / consolidarResultadoFinal()
+
+state "EmAndamento\n«estado composto»" as EmAndamento {
+  [*]            --> AguardandoEnvio
+
+  AguardandoEnvio --> EmRevisao  : cliente envia resposta\n/ item.status = review
+  EmRevisao       --> AguardandoEnvio : agencia reprova\n/ item.status = rejected
+  EmRevisao       --> Concluido  : todos os itens aprovados\n/ item.status = approved
+
+  Concluido --> [*]
+}
+
+EmAndamento --> Aprovado : [todos os itens = approved]
+
+' ══════════════════════════════════════
+'  APROVADO
+' ══════════════════════════════════════
+Aprovado : entry / atualizarStatus("approved")
+Aprovado : do    / notificarAgenciaChecklistConcluido()
+Aprovado : exit  / arquivarChecklist()
+
+state "Aprovado" as Aprovado
+
+Aprovado --> [*]
+
+@enduml
