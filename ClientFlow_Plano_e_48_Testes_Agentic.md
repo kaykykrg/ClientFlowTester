@@ -153,14 +153,14 @@ Observação de versão: antes da implementação, confirmar a versão do PHP co
 
 | Teste | Tipo | O que testar | Arquivo / Função principal | Responsável | Preparado | Executado | Resultado | Observação |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T25 | Unitário | Extensões devem ser convertidas para minúsculas | api/cliente_tarefa_enviar.php / checklist_criar.php → normalize_extensions() |  | [ ] | [ ] | OK / NOK |  |
-| T26 | Unitário | Extensões duplicadas devem ser removidas | normalize_extensions() |  | [ ] | [ ] | OK / NOK |  |
-| T27 | Unitário | Caracteres inválidos das extensões devem ser removidos | normalize_extensions() |  | [ ] | [ ] | OK / NOK |  |
-| T28 | Unitário | Tipo image deve retornar extensões de imagem padrão | default_extensions_for_type() |  | [ ] | [ ] | OK / NOK |  |
-| T29 | Integração | Upload válido de arquivo deve registrar a resposta e alterar o item para review | api/cliente_tarefa_enviar.php + banco de dados |  | [ ] | [ ] | OK / NOK |  |
-| T30 | Funcional/API | Upload com extensão não permitida deve ser rejeitado com a mensagem esperada | api/cliente_tarefa_enviar.php |  | [ ] | [ ] | OK / NOK |  |
-| T31 | Segurança/Regra de negócio | Item com status approved não deve aceitar reenvio do cliente | api/cliente_tarefa_enviar.php |  | [ ] | [ ] | OK / NOK |  |
-| T32 | Persistência/BD | Upload aceito deve persistir arquivo_path/resposta e status correspondente | api/cliente_tarefa_enviar.php + tabelas de respostas/itens |  | [ ] | [ ] | OK / NOK |  |
+| T25 | Unitário | Extensões devem ser convertidas para minúsculas | api/cliente_tarefa_enviar.php / checklist_criar.php → normalize_extensions() | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+| T26 | Unitário | Extensões duplicadas devem ser removidas | normalize_extensions() | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+| T27 | Unitário | Caracteres inválidos das extensões devem ser removidos | normalize_extensions() | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+| T28 | Unitário | Tipo image deve retornar extensões de imagem padrão | default_extensions_for_type() | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+| T29 | Integração | Upload válido de arquivo deve registrar a resposta e alterar o item para review | api/cliente_tarefa_enviar.php + banco de dados | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+| T30 | Funcional/API | Upload com extensão não permitida deve ser rejeitado com a mensagem esperada | api/cliente_tarefa_enviar.php | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+| T31 | Segurança/Regra de negócio | Item com status approved não deve aceitar reenvio do cliente | api/cliente_tarefa_enviar.php | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+| T32 | Persistência/BD | Upload aceito deve persistir arquivo_path/resposta e status correspondente | api/cliente_tarefa_enviar.php + tabelas de respostas/itens | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
 
 ### Bloco E - 8 testes
 
