@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__ . "/db_conexao.php";
+include_once __DIR__ . "/permissoes_sessao.php";
 
 $retorno = [
     "status" => "nok",
@@ -33,17 +34,6 @@ function carregar_vinculo_agencia_ativo($conexao, $usuario_id) {
     $stmt_ua->close();
 
     return $ua;
-}
-
-function montar_permissoes_sessao($ua) {
-    return [
-        'perm_ver_clientes' => (bool)$ua['perm_ver_clientes'],
-        'perm_criar_clientes' => (bool)$ua['perm_criar_clientes'],
-        'perm_ver_projetos' => (bool)$ua['perm_ver_projetos'],
-        'perm_criar_projetos' => (bool)$ua['perm_criar_projetos'],
-        'perm_designar_projetos' => (bool)$ua['perm_designar_projetos'],
-        'perm_gerenciar_membros' => (bool)$ua['perm_gerenciar_membros']
-    ];
 }
 
 $email_form = trim($_POST['email'] ?? '');

@@ -86,18 +86,8 @@ if (!function_exists('normalizar_item_template')) {
 // Funções de usuario_login.php
 // ========================
 
-if (!function_exists('montar_permissoes_sessao')) {
-    function montar_permissoes_sessao($ua) {
-        return [
-            'perm_ver_clientes' => (bool)$ua['perm_ver_clientes'],
-            'perm_criar_clientes' => (bool)$ua['perm_criar_clientes'],
-            'perm_ver_projetos' => (bool)$ua['perm_ver_projetos'],
-            'perm_criar_projetos' => (bool)$ua['perm_criar_projetos'],
-            'perm_designar_projetos' => (bool)$ua['perm_designar_projetos'],
-            'perm_gerenciar_membros' => (bool)$ua['perm_gerenciar_membros']
-        ];
-    }
-}
+// Função real, carregada de api/permissoes_sessao.php (a mesma usada por usuario_login.php)
+require_once __DIR__ . '/../api/permissoes_sessao.php';
 
 // ========================
 // Função auxiliar para default_extensions_for_type (Bloco D - T28)

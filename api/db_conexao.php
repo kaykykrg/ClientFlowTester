@@ -1,9 +1,9 @@
 <?php
 
-$servidor = "127.0.0.1:3306";
-$usuario  = "root";
-$senha    = "";
-$nome_banco = "clientflow";
+$servidor = getenv('CF_DB_SERVER') ?: "127.0.0.1:3306";
+$usuario  = getenv('CF_DB_USER') ?: "root";
+$senha    = getenv('CF_DB_PASS') !== false ? getenv('CF_DB_PASS') : "";
+$nome_banco = getenv('CF_DB_NAME') ?: "clientflow";
 
 $conexao = new mysqli($servidor, $usuario, $senha, $nome_banco);
 
