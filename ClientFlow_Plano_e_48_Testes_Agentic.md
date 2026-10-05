@@ -112,81 +112,93 @@ Observação de versão: antes da implementação, confirmar a versão do PHP co
 
 ### Bloco A - 8 testes
 
-| Teste | Tipo | O que testar | Arquivo / Função principal | Responsável | Preparado | Executado | Resultado | Observação |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T01 | Unitário | CPF válido deve ser aceito | cadastro.js → isValidCPF() | Kayky Quesada Kruger | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T02 | Unitário | CPF com dígitos repetidos deve ser rejeitado | cadastro.js → isValidCPF() | Kayky Quesada Kruger | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T03 | Unitário | CNPJ válido deve ser aceito | cadastro.js → isValidCNPJ() | Kayky Quesada Kruger | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T04 | Unitário | CNPJ inválido deve ser rejeitado | cadastro.js → isValidCNPJ() | Kayky Quesada Kruger | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T05 | Integração | Login válido deve autenticar o usuário e montar a sessão com os dados corretos | api/usuario_login.php + banco de dados | Kayky Quesada Kruger | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T06 | Funcional/API | Login com e-mail ou senha em branco deve retornar a mensagem de validação esperada | api/usuario_login.php | Kayky Quesada Kruger | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T07 | Segurança/Autorização | Usuário de agência sem vínculo ativo não deve conseguir concluir o login | api/usuario_login.php → carregar_vinculo_agencia_ativo() | Kayky Quesada Kruger | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T08 | Persistência/BD | Após login aprovado, data_ultimo_acesso deve ser atualizada no banco | api/usuario_login.php + tabela usuarios | Kayky Quesada Kruger | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+**Responsável:** Kayky Quesada Kruger
+
+| Cenário | ID | Caso de Teste | Prioridade | Tipo de Teste | Passo a passo para execução | Resultado esperado | Resultado obtido | Status | Observação |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Login e Cadastro | T01 | CPF válido deve ser aceito | Alta | Unitário | Chamar isValidCPF() com um CPF válido (ex: 529.982.247-25). | Retornar true. | Retornou true corretamente. | OK | Testado e aprovado com PHPUnit |
+| Login e Cadastro | T02 | CPF com dígitos repetidos deve ser rejeitado | Alta | Unitário | Chamar isValidCPF() com CPF de dígitos repetidos (ex: 111.111.111-11). | Retornar false. | Retornou false corretamente. | OK | Testado e aprovado com PHPUnit |
+| Login e Cadastro | T03 | CNPJ válido deve ser aceito | Alta | Unitário | Chamar isValidCNPJ() com um CNPJ válido (ex: 11.222.333/0001-81). | Retornar true. | Retornou true corretamente. | OK | Testado e aprovado com PHPUnit |
+| Login e Cadastro | T04 | CNPJ inválido deve ser rejeitado | Alta | Unitário | Chamar isValidCNPJ() com um CNPJ inválido (ex: 00.000.000/0000-00). | Retornar false. | Retornou false corretamente. | OK | Testado e aprovado com PHPUnit |
+| Login e Cadastro | T05 | Login válido deve autenticar o usuário e montar a sessão com os dados corretos | Alta | Integração | Chamar usuario_login.php com e-mail e senha válidos existentes no banco. | Sessão montada com id, nome, tipo e dados corretos; resposta de sucesso. | Sessão montada corretamente com todos os dados esperados. | OK | Testado e aprovado com PHPUnit |
+| Login e Cadastro | T06 | Login com e-mail ou senha em branco deve retornar a mensagem de validação esperada | Alta | Funcional/API | Chamar usuario_login.php com e-mail ou senha em branco. | Retornar mensagem de erro de validação. | Retornou mensagem de validação correta. | OK | Testado e aprovado com PHPUnit |
+| Login e Cadastro | T07 | Usuário de agência sem vínculo ativo não deve conseguir concluir o login | Alta | Segurança/Autorização | Chamar carregar_vinculo_agencia_ativo() para usuário sem vínculo ativo. | Login bloqueado; retornar erro de vínculo. | Login bloqueado corretamente. | OK | Testado e aprovado com PHPUnit |
+| Login e Cadastro | T08 | Após login aprovado, data_ultimo_acesso deve ser atualizada no banco | Alta | Persistência/BD | Realizar login válido e verificar o campo data_ultimo_acesso na tabela usuarios. | Campo atualizado com a data/hora do login. | Campo atualizado corretamente no banco. | OK | Testado e aprovado com PHPUnit |
 
 ### Bloco B - 8 testes
 
-| Teste | Tipo | O que testar | Arquivo / Função principal | Responsável | Preparado | Executado | Resultado | Observação |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T09 | Unitário | Senha com menos de 8 caracteres deve ser rejeitada | cadastro.js → validatePasswordStrength() | Vantuil Plaster | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T10 | Unitário | Senha sem letra maiúscula deve ser rejeitada | cadastro.js → validatePasswordStrength() | Vantuil Plaster | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T11 | Unitário | Senha sem letra minúscula deve ser rejeitada | cadastro.js → validatePasswordStrength() | Vantuil Plaster | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T12 | Unitário | Senha sem número deve ser rejeitada | cadastro.js → validatePasswordStrength() | Vantuil Plaster | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T13 | Integração | Criação válida de checklist deve salvar o checklist e seus itens relacionados | api/checklist_criar.php + banco de dados | Vantuil Plaster | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T14 | Funcional/API | Criação de checklist sem itens deve retornar 'Adicione pelo menos um item no formulário.' | api/checklist_criar.php | Vantuil Plaster | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T15 | Segurança/Autorização | Perfil cliente não deve conseguir criar checklist | api/checklist_criar.php | Vantuil Plaster | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T16 | Persistência/BD | Checklist criado deve possuir link_hash único e dados persistidos corretamente | api/checklist_criar.php + tabelas de checklist | Vantuil Plaster | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+**Responsável:** Vantuil Plaster
+
+| Cenário | ID | Caso de Teste | Prioridade | Tipo de Teste | Passo a passo para execução | Resultado esperado | Resultado obtido | Status | Observação |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Senha e Checklist | T09 | Senha com menos de 8 caracteres deve ser rejeitada | Alta | Unitário | Chamar validatePasswordStrength() com senha de 7 caracteres. | Retornar false / erro de validação. | Retornou false corretamente. | OK | Testado e aprovado com PHPUnit |
+| Senha e Checklist | T10 | Senha sem letra maiúscula deve ser rejeitada | Alta | Unitário | Chamar validatePasswordStrength() com senha sem maiúscula (ex: abc12345). | Retornar false / erro de validação. | Retornou false corretamente. | OK | Testado e aprovado com PHPUnit |
+| Senha e Checklist | T11 | Senha sem letra minúscula deve ser rejeitada | Alta | Unitário | Chamar validatePasswordStrength() com senha sem minúscula (ex: ABC12345). | Retornar false / erro de validação. | Retornou false corretamente. | OK | Testado e aprovado com PHPUnit |
+| Senha e Checklist | T12 | Senha sem número deve ser rejeitada | Alta | Unitário | Chamar validatePasswordStrength() com senha sem dígito (ex: Abcdefgh). | Retornar false / erro de validação. | Retornou false corretamente. | OK | Testado e aprovado com PHPUnit |
+| Senha e Checklist | T13 | Criação válida de checklist deve salvar o checklist e seus itens relacionados | Alta | Integração | Chamar checklist_criar.php com dados válidos e itens; verificar no banco. | Checklist e itens salvos com IDs e dados corretos. | Checklist e itens persistidos corretamente. | OK | Testado e aprovado com PHPUnit |
+| Senha e Checklist | T14 | Criação de checklist sem itens deve retornar mensagem esperada | Média | Funcional/API | Chamar checklist_criar.php sem nenhum item. | Retornar 'Adicione pelo menos um item no formulário.' | Mensagem retornada corretamente. | OK | Testado e aprovado com PHPUnit |
+| Senha e Checklist | T15 | Perfil cliente não deve conseguir criar checklist | Alta | Segurança/Autorização | Chamar checklist_criar.php autenticado como usuário do tipo 'client'. | Acesso bloqueado; retornar erro de permissão. | Acesso bloqueado corretamente. | OK | Testado e aprovado com PHPUnit |
+| Senha e Checklist | T16 | Checklist criado deve possuir link_hash único e dados persistidos corretamente | Alta | Persistência/BD | Criar checklist válido e verificar o campo link_hash no banco. | link_hash único gerado e dados completos persistidos. | link_hash gerado e dados persistidos corretamente. | OK | Testado e aprovado com PHPUnit |
 
 ### Bloco C - 8 testes
 
-| Teste | Tipo | O que testar | Arquivo / Função principal | Responsável | Preparado | Executado | Resultado | Observação |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T17 | Unitário | Remover caracteres não numéricos de uma entrada | cadastro.js → onlyDigits() | Arthur Kenji | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T18 | Unitário | Formatar CPF corretamente | cadastro.js → formatCPF() | Arthur Kenji | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T19 | Unitário | Formatar CNPJ corretamente | cadastro.js → formatCNPJ() | Arthur Kenji | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T20 | Unitário | Formatar telefone corretamente | cadastro.js → formatPhone() | Arthur Kenji | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T21 | Integração | Vincular um checklist pela primeira vez deve associá-lo ao cliente autenticado | api/checklist_vincular_cliente.php + banco de dados | Arthur Kenji | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T22 | Funcional/API | Tentativa de vincular checklist já associado a outro cliente deve retornar bloqueio | api/checklist_vincular_cliente.php | Arthur Kenji | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T23 | Segurança/Autorização | Usuário não autenticado não deve conseguir vincular um checklist a uma conta | api/checklist_vincular_cliente.php | Arthur Kenji | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T24 | Persistência/BD | Após vínculo válido, cliente_id deve permanecer associado ao checklist | api/checklist_vincular_cliente.php + tabela checklists | Arthur Kenji | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+**Responsável:** Arthur Kenji
+
+| Cenário | ID | Caso de Teste | Prioridade | Tipo de Teste | Passo a passo para execução | Resultado esperado | Resultado obtido | Status | Observação |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Formatação e Vínculo | T17 | Remover caracteres não numéricos de uma entrada | Média | Unitário | Chamar onlyDigits() com string contendo letras e símbolos (ex: '123.abc-45'). | Retornar apenas os dígitos '12345'. | Retornou somente dígitos corretamente. | OK | Testado e aprovado com PHPUnit |
+| Formatação e Vínculo | T18 | Formatar CPF corretamente | Média | Unitário | Chamar formatCPF() com 11 dígitos numéricos. | Retornar string no formato 000.000.000-00. | Formatação aplicada corretamente. | OK | Testado e aprovado com PHPUnit |
+| Formatação e Vínculo | T19 | Formatar CNPJ corretamente | Média | Unitário | Chamar formatCNPJ() com 14 dígitos numéricos. | Retornar string no formato 00.000.000/0000-00. | Formatação aplicada corretamente. | OK | Testado e aprovado com PHPUnit |
+| Formatação e Vínculo | T20 | Formatar telefone corretamente | Média | Unitário | Chamar formatPhone() com 11 dígitos numéricos. | Retornar string no formato (00) 00000-0000. | Formatação aplicada corretamente. | OK | Testado e aprovado com PHPUnit |
+| Formatação e Vínculo | T21 | Vincular checklist pela primeira vez deve associá-lo ao cliente autenticado | Alta | Integração | Chamar checklist_vincular_cliente.php autenticado como cliente; checklist sem cliente_id. | cliente_id associado ao checklist no banco. | Vínculo criado corretamente no banco. | OK | Testado e aprovado com PHPUnit |
+| Formatação e Vínculo | T22 | Tentativa de vincular checklist já associado a outro cliente deve retornar bloqueio | Alta | Funcional/API | Chamar checklist_vincular_cliente.php para checklist já vinculado a outro cliente. | Retornar erro de bloqueio. | Bloqueio retornado corretamente. | OK | Testado e aprovado com PHPUnit |
+| Formatação e Vínculo | T23 | Usuário não autenticado não deve conseguir vincular um checklist | Alta | Segurança/Autorização | Chamar checklist_vincular_cliente.php sem sessão autenticada. | Acesso bloqueado; retornar erro de autenticação. | Acesso bloqueado corretamente. | OK | Testado e aprovado com PHPUnit |
+| Formatação e Vínculo | T24 | Após vínculo válido, cliente_id deve permanecer associado ao checklist | Alta | Persistência/BD | Realizar vínculo válido e consultar o campo cliente_id no banco. | cliente_id persistido e associado corretamente. | Persistência confirmada no banco. | OK | Testado e aprovado com PHPUnit |
 
 ### Bloco D - 8 testes
 
-| Teste | Tipo | O que testar | Arquivo / Função principal | Responsável | Preparado | Executado | Resultado | Observação |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T25 | Unitário | Extensões devem ser convertidas para minúsculas | api/cliente_tarefa_enviar.php / checklist_criar.php → normalize_extensions() | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T26 | Unitário | Extensões duplicadas devem ser removidas | normalize_extensions() | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T27 | Unitário | Caracteres inválidos das extensões devem ser removidos | normalize_extensions() | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T28 | Unitário | Tipo image deve retornar extensões de imagem padrão | default_extensions_for_type() | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T29 | Integração | Upload válido de arquivo deve registrar a resposta e alterar o item para review | api/cliente_tarefa_enviar.php + banco de dados | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T30 | Funcional/API | Upload com extensão não permitida deve ser rejeitado com a mensagem esperada | api/cliente_tarefa_enviar.php | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T31 | Segurança/Regra de negócio | Item com status approved não deve aceitar reenvio do cliente | api/cliente_tarefa_enviar.php | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
-| T32 | Persistência/BD | Upload aceito deve persistir arquivo_path/resposta e status correspondente | api/cliente_tarefa_enviar.php + tabelas de respostas/itens | Matheus Pires | [x] | [x] | OK | Testado e aprovado com PHPUnit |
+**Responsável:** Matheus Pires
+
+| Cenário | ID | Caso de Teste | Prioridade | Tipo de Teste | Passo a passo para execução | Resultado esperado | Resultado obtido | Status | Observação |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Upload de Arquivos | T25 | Extensões devem ser convertidas para minúsculas | Média | Unitário | Chamar normalize_extensions() com extensões em maiúsculas (ex: 'JPG,PNG,GIF'). | Retornar 'jpg,png,gif'. | Retornou 'jpg,png,gif' corretamente. | OK | Testado e aprovado com PHPUnit |
+| Upload de Arquivos | T26 | Extensões duplicadas devem ser removidas | Média | Unitário | Chamar normalize_extensions() com extensões duplicadas (ex: 'jpg,png,jpg'). | Retornar 'jpg,png' sem duplicatas. | Duplicatas removidas corretamente. | OK | Testado e aprovado com PHPUnit |
+| Upload de Arquivos | T27 | Caracteres inválidos das extensões devem ser removidos | Média | Unitário | Chamar normalize_extensions() com caracteres especiais (ex: '.jp@g, .p!ng'). | Retornar somente caracteres alfanuméricos válidos. | Caracteres inválidos removidos corretamente. | OK | Testado e aprovado com PHPUnit |
+| Upload de Arquivos | T28 | Tipo image deve retornar extensões de imagem padrão | Média | Unitário | Chamar default_extensions_for_type('image'). | Retornar 'jpg,jpeg,png,gif,webp'. | Retornou extensões padrão corretamente. | OK | Testado e aprovado com PHPUnit |
+| Upload de Arquivos | T29 | Upload válido de arquivo deve registrar a resposta e alterar o item para review | Alta | Integração | Simular upload com extensão permitida; verificar resposta e status do item. | Resposta registrada e status alterado para 'review'. | Resposta e status registrados corretamente. | OK | Testado e aprovado com PHPUnit |
+| Upload de Arquivos | T30 | Upload com extensão não permitida deve ser rejeitado com a mensagem esperada | Alta | Funcional/API | Tentar upload com extensão não listada (ex: .exe). | Retornar mensagem de erro de extensão não permitida. | Mensagem de rejeição retornada corretamente. | OK | Testado e aprovado com PHPUnit |
+| Upload de Arquivos | T31 | Item com status approved não deve aceitar reenvio do cliente | Alta | Segurança/Regra de negócio | Tentar enviar arquivo para item com status 'approved'. | Reenvio bloqueado; retornar erro. | Bloqueio aplicado corretamente. | OK | Testado e aprovado com PHPUnit |
+| Upload de Arquivos | T32 | Upload aceito deve persistir arquivo_path/resposta e status correspondente | Alta | Persistência/BD | Realizar upload válido e verificar arquivo_path, resposta e status no banco. | Dados persistidos corretamente nas tabelas de respostas/itens. | Persistência confirmada no banco. | OK | Testado e aprovado com PHPUnit |
 
 ### Bloco E - 8 testes
 
-| Teste | Tipo | O que testar | Arquivo / Função principal | Responsável | Preparado | Executado | Resultado | Observação |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T33 | Unitário | Item de template sem nome deve ser rejeitado | api/template_salvar.php → normalizar_item_template() |  | [ ] | [ ] | OK / NOK |  |
-| T34 | Unitário | Tipo de item inválido deve ser normalizado para text | normalizar_item_template() |  | [ ] | [ ] | OK / NOK |  |
-| T35 | Unitário | Tipo de item válido deve ser mantido | normalizar_item_template() |  | [ ] | [ ] | OK / NOK |  |
-| T36 | Unitário | Limites mínimo e máximo invertidos devem ser tratados corretamente | normalizar_item_template() |  | [ ] | [ ] | OK / NOK |  |
-| T37 | Integração | Salvar um template e carregá-lo depois deve manter seus itens e configurações | api/template_salvar.php + api/template_carregar.php |  | [ ] | [ ] | OK / NOK |  |
-| T38 | Funcional/API | Salvar template com nome duplicado na mesma agência deve retornar erro | api/template_salvar.php |  | [ ] | [ ] | OK / NOK |  |
-| T39 | Segurança/Autorização | Usuário sem permissão para criar projetos/templates não deve salvar template | api/template_salvar.php |  | [ ] | [ ] | OK / NOK |  |
-| T40 | Persistência/BD | Template válido e seus itens devem ser gravados e relacionados corretamente | api/template_salvar.php + tabelas de templates |  | [ ] | [ ] | OK / NOK |  |
+**Responsável:** —
+
+| Cenário | ID | Caso de Teste | Prioridade | Tipo de Teste | Passo a passo para execução | Resultado esperado | Resultado obtido | Status | Observação |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Templates | T33 | Item de template sem nome deve ser rejeitado | Alta | Unitário | Chamar normalizar_item_template() com item sem nome (nome vazio). | Retornar null. | — | — | — |
+| Templates | T34 | Tipo de item inválido deve ser normalizado para text | Média | Unitário | Chamar normalizar_item_template() com tipo desconhecido (ex: 'banana'). | Tipo normalizado para 'text'. | — | — | — |
+| Templates | T35 | Tipo de item válido deve ser mantido | Média | Unitário | Chamar normalizar_item_template() com tipo válido (ex: 'image'). | Tipo mantido como 'image'. | — | — | — |
+| Templates | T36 | Limites mínimo e máximo invertidos devem ser tratados corretamente | Média | Unitário | Chamar normalizar_item_template() com min_chars > max_chars (ex: 100 e 10). | Valores trocados: min=10, max=100. | — | — | — |
+| Templates | T37 | Salvar um template e carregá-lo depois deve manter seus itens e configurações | Alta | Integração | Salvar template via template_salvar.php e carregar via template_carregar.php. | Itens e configurações idênticos ao salvado. | — | — | — |
+| Templates | T38 | Salvar template com nome duplicado na mesma agência deve retornar erro | Alta | Funcional/API | Tentar salvar template com nome já existente na agência. | Retornar erro de nome duplicado. | — | — | — |
+| Templates | T39 | Usuário sem permissão não deve salvar template | Alta | Segurança/Autorização | Chamar template_salvar.php autenticado como usuário tipo 'client'. | Acesso bloqueado; retornar erro de permissão. | — | — | — |
+| Templates | T40 | Template válido e seus itens devem ser gravados e relacionados corretamente | Alta | Persistência/BD | Salvar template válido e verificar registros nas tabelas de templates e itens. | Dados persistidos e relacionados corretamente. | — | — | — |
 
 ### Bloco F - 8 testes
 
-| Teste | Tipo | O que testar | Arquivo / Função principal | Responsável | Preparado | Executado | Resultado | Observação |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T41 | Unitário | Permissão perm_ver_clientes deve ser convertida para booleano | api/usuario_login.php → montar_permissoes_sessao() |  | [ ] | [ ] | OK / NOK |  |
-| T42 | Unitário | Permissão perm_criar_clientes deve ser convertida para booleano | montar_permissoes_sessao() |  | [ ] | [ ] | OK / NOK |  |
-| T43 | Unitário | Permissão perm_ver_projetos deve ser convertida para booleano | montar_permissoes_sessao() |  | [ ] | [ ] | OK / NOK |  |
-| T44 | Unitário | Permissão perm_criar_projetos deve ser convertida para booleano | montar_permissoes_sessao() |  | [ ] | [ ] | OK / NOK |  |
-| T45 | Integração | Cadastro válido de colaborador deve criar o usuário e o vínculo com a agência | api/membro_cadastrar.php + banco de dados |  | [ ] | [ ] | OK / NOK |  |
-| T46 | Funcional/API | Cadastro de colaborador com e-mail já existente deve ser rejeitado | api/membro_cadastrar.php |  | [ ] | [ ] | OK / NOK |  |
-| T47 | Segurança/Autorização | Usuário que não seja admin não deve conseguir alterar o status global de outra conta | api/admin_usuario_atualizar_status.php |  | [ ] | [ ] | OK / NOK |  |
-| T48 | Persistência/BD | Remoção/desativação de membro deve refletir corretamente no vínculo e nas designações | api/membro_excluir.php + usuarios_agencia/projetos_membros |  | [ ] | [ ] | OK / NOK |  |
+**Responsável:** Yuri Allegreti
+
+| Cenário | ID | Caso de Teste | Prioridade | Tipo de Teste | Passo a passo para execução | Resultado esperado | Resultado obtido | Status | Observação |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Permissões e Membros | T41 | Permissão perm_ver_clientes deve ser convertida para booleano | Alta | Unitário | Chamar montar_permissoes_sessao() com perm_ver_clientes = 1. | Retornar true (booleano). | — | — | — |
+| Permissões e Membros | T42 | Permissão perm_criar_clientes deve ser convertida para booleano | Alta | Unitário | Chamar montar_permissoes_sessao() com perm_criar_clientes = 1. | Retornar true (booleano). | — | — | — |
+| Permissões e Membros | T43 | Permissão perm_ver_projetos deve ser convertida para booleano | Alta | Unitário | Chamar montar_permissoes_sessao() com perm_ver_projetos = 1. | Retornar true (booleano). | — | — | — |
+| Permissões e Membros | T44 | Permissão perm_criar_projetos deve ser convertida para booleano | Alta | Unitário | Chamar montar_permissoes_sessao() com perm_criar_projetos = 1. | Retornar true (booleano). | — | — | — |
+| Permissões e Membros | T45 | Cadastro válido de colaborador deve criar o usuário e o vínculo com a agência | Alta | Integração | Chamar membro_cadastrar.php com dados válidos; verificar criação no banco. | Usuário e vínculo criados com dados corretos. | — | — | — |
+| Permissões e Membros | T46 | Cadastro de colaborador com e-mail já existente deve ser rejeitado | Alta | Funcional/API | Tentar cadastrar colaborador com e-mail já existente no sistema. | Retornar erro de e-mail duplicado. | — | — | — |
+| Permissões e Membros | T47 | Usuário que não seja admin não deve conseguir alterar o status global de outra conta | Alta | Segurança/Autorização | Chamar admin_usuario_atualizar_status.php autenticado como não-admin. | Acesso bloqueado; retornar erro de permissão. | — | — | — |
+| Permissões e Membros | T48 | Remoção/desativação de membro deve refletir corretamente no vínculo e nas designações | Alta | Persistência/BD | Desativar membro e verificar campo 'ativo' e remoção das designações de projetos. | Vínculo desativado e designações removidas no banco. | — | — | — |
 
 
 ## Resumo das Implementações (Agente)
