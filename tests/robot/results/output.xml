@@ -1,0 +1,1693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.5 (Python 3.15.0 on win32)" generated="2026-10-26T12:03:55.667880" rpa="false" schemaversion="5">
+<suite id="s1" name="Robot" source="C:\Users\kayky\Downloads\ClientFlow (1)\ClientFlow\tests\robot">
+<kw name="Log" owner="BuiltIn" type="SETUP">
+<msg time="2026-10-26T12:03:55.708785" level="INFO">Iniciando suite ClientFlow — 30 testes Robot Framework</msg>
+<arg>Iniciando suite ClientFlow — 30 testes Robot Framework</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-10-26T12:03:55.708459" elapsed="0.000394"/>
+</kw>
+<suite id="s1-s1" name="Bloco A Login Cadastro" source="C:\Users\kayky\Downloads\ClientFlow (1)\ClientFlow\tests\robot\bloco_a_login_cadastro.robot">
+<test id="s1-s1-t1" name="T01 CPF Valido Deve Ser Aceito" line="43">
+<kw name="Validar CPF Retorna True">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:55.731899" level="INFO">${codigo} = function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function isRepeat($v){return (bool)preg_match('/^(.)\1+$/',$v);}
+function isValidCPF($v){$c=onlyDigits($v);if(strlen($c)!=11||isRepeat(...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}</arg>
+<arg>function isRepeat($v){return (bool)preg_match('/^(.)\\1+$/',$v);}</arg>
+<arg>function isValidCPF($v){$c=onlyDigits($v);if(strlen($c)!=11||isRepeat($c))return false;</arg>
+<arg>$s=0;for($i=0;$i&lt;9;$i++)$s+=intval($c[$i])*(10-$i);$k=($s*10)%11;if($k===10)$k=0;if($k!=intval($c[9]))return false;</arg>
+<arg>$s=0;for($i=0;$i&lt;10;$i++)$s+=intval($c[$i])*(11-$i);$k=($s*10)%11;if($k===10)$k=0;return $k===intval($c[10]);}</arg>
+<arg>echo isValidCPF('${cpf}') ? 'true' : 'false';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:55.731610" elapsed="0.000318"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:55.735196" level="INFO">Starting process:
+php -r "function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function isRepeat($v){return (bool)preg_match('/^(.)\1+$/',$v);}
+function isValidCPF($v){$c=onlyDigits($v);if(strlen($c)!=11||isRepeat($c))return false;
+$s=0;for($i=0;$i&lt;9;$i++)$s+=intval($c[$i])*(10-$i);$k=($s*10)%11;if($k===10)$k=0;if($k!=intval($c[9]))return false;
+$s=0;for($i=0;$i&lt;10;$i++)$s+=intval($c[$i])*(11-$i);$k=($s*10)%11;if($k===10)$k=0;return $k===intval($c[10]);}
+echo isValidCPF('529.982.247-25') ? 'true' : 'false';"</msg>
+<msg time="2026-10-26T12:03:56.015140" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:56.071696" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:56.071890" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:55.732037" elapsed="0.339874"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>true</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.072089" elapsed="0.000671"/>
+</kw>
+<arg>529.982.247-25</arg>
+<doc>Executa a logica de isValidCPF via PHP e verifica retorno true.</doc>
+<status status="PASS" start="2026-10-26T12:03:55.731318" elapsed="0.341520"/>
+</kw>
+<doc>Unitario - Particionamento de equivalencia (classe valida).
+isValidCPF('529.982.247-25') deve retornar true.</doc>
+<tag>bloco_a</tag>
+<tag>cpf</tag>
+<tag>kayky</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:55.730880" elapsed="0.342055"/>
+</test>
+<test id="s1-s1-t2" name="T02 CPF Com Digitos Repetidos Deve Ser Rejeitado" line="49">
+<kw name="Validar CPF Retorna False">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:56.073909" level="INFO">${codigo} = function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function isRepeat($v){return (bool)preg_match('/^(.)\1+$/',$v);}
+function isValidCPF($v){$c=onlyDigits($v);if(strlen($c)!=11||isRepeat(...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}</arg>
+<arg>function isRepeat($v){return (bool)preg_match('/^(.)\\1+$/',$v);}</arg>
+<arg>function isValidCPF($v){$c=onlyDigits($v);if(strlen($c)!=11||isRepeat($c))return false;</arg>
+<arg>$s=0;for($i=0;$i&lt;9;$i++)$s+=intval($c[$i])*(10-$i);$k=($s*10)%11;if($k===10)$k=0;if($k!=intval($c[9]))return false;</arg>
+<arg>$s=0;for($i=0;$i&lt;10;$i++)$s+=intval($c[$i])*(11-$i);$k=($s*10)%11;if($k===10)$k=0;return $k===intval($c[10]);}</arg>
+<arg>echo isValidCPF('${cpf}') ? 'true' : 'false';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.073662" elapsed="0.000267"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:56.074544" level="INFO">Starting process:
+php -r "function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function isRepeat($v){return (bool)preg_match('/^(.)\1+$/',$v);}
+function isValidCPF($v){$c=onlyDigits($v);if(strlen($c)!=11||isRepeat($c))return false;
+$s=0;for($i=0;$i&lt;9;$i++)$s+=intval($c[$i])*(10-$i);$k=($s*10)%11;if($k===10)$k=0;if($k!=intval($c[9]))return false;
+$s=0;for($i=0;$i&lt;10;$i++)$s+=intval($c[$i])*(11-$i);$k=($s*10)%11;if($k===10)$k=0;return $k===intval($c[10]);}
+echo isValidCPF('111.111.111-11') ? 'true' : 'false';"</msg>
+<msg time="2026-10-26T12:03:56.460409" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:56.545420" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:56.545601" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.074027" elapsed="0.471593"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>false</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.545788" elapsed="0.001223"/>
+</kw>
+<arg>111.111.111-11</arg>
+<doc>Executa a logica de isValidCPF via PHP e verifica retorno false.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.073470" elapsed="0.473623"/>
+</kw>
+<doc>Unitario - Particionamento de equivalencia (classe invalida: todos iguais).
+isValidCPF('111.111.111-11') deve retornar false.</doc>
+<tag>bloco_a</tag>
+<tag>cpf</tag>
+<tag>kayky</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:56.073098" elapsed="0.474092"/>
+</test>
+<test id="s1-s1-t3" name="T03 CNPJ Valido Deve Ser Aceito" line="55">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:56.547884" level="INFO">${codigo} = function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function isRepeat($v){return (bool)preg_match('/^(.)\1+$/',$v);}
+function isValidCNPJ($v){$c=onlyDigits($v);if(strlen($c)!=14||isRepeat...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}</arg>
+<arg>function isRepeat($v){return (bool)preg_match('/^(.)\\1+$/',$v);}</arg>
+<arg>function isValidCNPJ($v){$c=onlyDigits($v);if(strlen($c)!=14||isRepeat($c))return false;</arg>
+<arg>$b=substr($c,0,12);$f1=[5,4,3,2,9,8,7,6,5,4,3,2];$s=0;</arg>
+<arg>for($i=0;$i&lt;12;$i++)$s+=intval($b[$i])*$f1[$i];$r=$s%11;$d1=$r&lt;2?0:11-$r;</arg>
+<arg>$b2=$b.$d1;$f2=[6,5,4,3,2,9,8,7,6,5,4,3,2];$s=0;</arg>
+<arg>for($i=0;$i&lt;13;$i++)$s+=intval($b2[$i])*$f2[$i];$r=$s%11;$d2=$r&lt;2?0:11-$r;</arg>
+<arg>return $c===$b.$d1.$d2;}</arg>
+<arg>echo isValidCNPJ('04.252.011/0001-10') ? 'true' : 'false';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.547623" elapsed="0.000280"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:56.548519" level="INFO">Starting process:
+php -r "function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function isRepeat($v){return (bool)preg_match('/^(.)\1+$/',$v);}
+function isValidCNPJ($v){$c=onlyDigits($v);if(strlen($c)!=14||isRepeat($c))return false;
+$b=substr($c,0,12);$f1=[5,4,3,2,9,8,7,6,5,4,3,2];$s=0;
+for($i=0;$i&lt;12;$i++)$s+=intval($b[$i])*$f1[$i];$r=$s%11;$d1=$r&lt;2?0:11-$r;
+$b2=$b.$d1;$f2=[6,5,4,3,2,9,8,7,6,5,4,3,2];$s=0;
+for($i=0;$i&lt;13;$i++)$s+=intval($b2[$i])*$f2[$i];$r=$s%11;$d2=$r&lt;2?0:11-$r;
+return $c===$b.$d1.$d2;}
+echo isValidCNPJ('04.252.011/0001-10') ? 'true' : 'false';"</msg>
+<msg time="2026-10-26T12:03:56.818104" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:56.874391" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:56.874579" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.548024" elapsed="0.326574"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>true</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.874767" elapsed="0.000589"/>
+</kw>
+<doc>Unitario - Particionamento de equivalencia (classe valida).
+isValidCNPJ('04.252.011/0001-10') deve retornar true.</doc>
+<tag>bloco_a</tag>
+<tag>cnpj</tag>
+<tag>kayky</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:56.547353" elapsed="0.328108"/>
+</test>
+<test id="s1-s1-t4" name="T04 CNPJ Invalido Deve Ser Rejeitado" line="72">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:56.876154" level="INFO">${codigo} = function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function isRepeat($v){return (bool)preg_match('/^(.)\1+$/',$v);}
+function isValidCNPJ($v){$c=onlyDigits($v);if(strlen($c)!=14||isRepeat...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}</arg>
+<arg>function isRepeat($v){return (bool)preg_match('/^(.)\\1+$/',$v);}</arg>
+<arg>function isValidCNPJ($v){$c=onlyDigits($v);if(strlen($c)!=14||isRepeat($c))return false;</arg>
+<arg>$b=substr($c,0,12);$f1=[5,4,3,2,9,8,7,6,5,4,3,2];$s=0;</arg>
+<arg>for($i=0;$i&lt;12;$i++)$s+=intval($b[$i])*$f1[$i];$r=$s%11;$d1=$r&lt;2?0:11-$r;</arg>
+<arg>$b2=$b.$d1;$f2=[6,5,4,3,2,9,8,7,6,5,4,3,2];$s=0;</arg>
+<arg>for($i=0;$i&lt;13;$i++)$s+=intval($b2[$i])*$f2[$i];$r=$s%11;$d2=$r&lt;2?0:11-$r;</arg>
+<arg>return $c===$b.$d1.$d2;}</arg>
+<arg>echo isValidCNPJ('00.000.000/0000-00') ? 'true' : 'false';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.875882" elapsed="0.000292"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:56.876762" level="INFO">Starting process:
+php -r "function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function isRepeat($v){return (bool)preg_match('/^(.)\1+$/',$v);}
+function isValidCNPJ($v){$c=onlyDigits($v);if(strlen($c)!=14||isRepeat($c))return false;
+$b=substr($c,0,12);$f1=[5,4,3,2,9,8,7,6,5,4,3,2];$s=0;
+for($i=0;$i&lt;12;$i++)$s+=intval($b[$i])*$f1[$i];$r=$s%11;$d1=$r&lt;2?0:11-$r;
+$b2=$b.$d1;$f2=[6,5,4,3,2,9,8,7,6,5,4,3,2];$s=0;
+for($i=0;$i&lt;13;$i++)$s+=intval($b2[$i])*$f2[$i];$r=$s%11;$d2=$r&lt;2?0:11-$r;
+return $c===$b.$d1.$d2;}
+echo isValidCNPJ('00.000.000/0000-00') ? 'true' : 'false';"</msg>
+<msg time="2026-10-26T12:03:57.084320" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:57.144584" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:57.144759" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:56.876290" elapsed="0.268544"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>false</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.145008" elapsed="0.001905"/>
+</kw>
+<doc>Unitario - Particionamento de equivalencia (classe invalida: zeros).
+isValidCNPJ('00.000.000/0000-00') deve retornar false.</doc>
+<tag>bloco_a</tag>
+<tag>cnpj</tag>
+<tag>kayky</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:56.875602" elapsed="0.271415"/>
+</test>
+<test id="s1-s1-t5" name="T05 Login Valido Monta Sessao Com Dados Corretos" line="89">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:57.147696" level="INFO">${codigo} = $ua=['perm_ver_clientes'=&gt;1,'perm_criar_clientes'=&gt;1,
+'perm_ver_projetos'=&gt;1,'perm_criar_projetos'=&gt;1,
+'perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;1,
+'ua_id'=&gt;10,'agencia_id'=&gt;5,'papel'=&gt;'ad...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>$ua=['perm_ver_clientes'=&gt;1,'perm_criar_clientes'=&gt;1,</arg>
+<arg>'perm_ver_projetos'=&gt;1,'perm_criar_projetos'=&gt;1,</arg>
+<arg>'perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;1,</arg>
+<arg>'ua_id'=&gt;10,'agencia_id'=&gt;5,'papel'=&gt;'admin'];</arg>
+<arg>$perm=['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],</arg>
+<arg>'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes']];</arg>
+<arg>$sessao=['usuario_id'=&gt;1,'agencia_id'=&gt;$ua['agencia_id'],'permissoes'=&gt;$perm];</arg>
+<arg>$ok=$sessao['usuario_id']===1</arg>
+<arg>&amp;&amp; $sessao['agencia_id']===5</arg>
+<arg>&amp;&amp; $sessao['permissoes']['perm_ver_clientes']===true;</arg>
+<arg>echo $ok ? 'ok' : 'nok';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.147440" elapsed="0.000276"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:57.148373" level="INFO">Starting process:
+php -r "$ua=['perm_ver_clientes'=&gt;1,'perm_criar_clientes'=&gt;1,
+'perm_ver_projetos'=&gt;1,'perm_criar_projetos'=&gt;1,
+'perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;1,
+'ua_id'=&gt;10,'agencia_id'=&gt;5,'papel'=&gt;'admin'];
+$perm=['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],
+'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes']];
+$sessao=['usuario_id'=&gt;1,'agencia_id'=&gt;$ua['agencia_id'],'permissoes'=&gt;$perm];
+$ok=$sessao['usuario_id']===1
+&amp;&amp; $sessao['agencia_id']===5
+&amp;&amp; $sessao['permissoes']['perm_ver_clientes']===true;
+echo $ok ? 'ok' : 'nok';"</msg>
+<msg time="2026-10-26T12:03:57.170732" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:57.230827" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:57.230998" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.147826" elapsed="0.083190"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>ok</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.231185" elapsed="0.000593"/>
+</kw>
+<doc>Integracao - simula montagem de sessao apos login bem-sucedido.
+Verifica usuario_id, agencia_id e permissoes booleanas corretos.</doc>
+<tag>bloco_a</tag>
+<tag>integracao</tag>
+<tag>kayky</tag>
+<tag>login</tag>
+<status status="PASS" start="2026-10-26T12:03:57.147154" elapsed="0.084750"/>
+</test>
+<doc>BLOCO A - Login e Cadastro (T01-T05)
+Responsavel: Kayky Quesada Kruger
+
+Testa as funcoes de validacao de CPF, CNPJ,
+autenticacao e montagem de sessao do ClientFlow.
+Conceitos aplicados: caixa-preta, particionamento de
+equivalencia, valores limite e analise de causa-efeito.</doc>
+<status status="PASS" start="2026-10-26T12:03:55.708922" elapsed="1.523404"/>
+</suite>
+<suite id="s1-s2" name="Bloco B Senha Checklist" source="C:\Users\kayky\Downloads\ClientFlow (1)\ClientFlow\tests\robot\bloco_b_senha_checklist.robot">
+<test id="s1-s2-t1" name="T06 Senha Com Menos De 8 Caracteres Deve Ser Rejeitada" line="16">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:57.235646" level="INFO">${codigo} = function vps($p){
+if(strlen($p)&lt;8) return 'curta';
+if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';
+if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';
+if(!preg_match('/[0-9]/',$p)) return 'sem...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function vps($p){</arg>
+<arg>if(strlen($p)&lt;8) return 'curta';</arg>
+<arg>if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';</arg>
+<arg>if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';</arg>
+<arg>if(!preg_match('/[0-9]/',$p)) return 'sem_numero';</arg>
+<arg>return null;}</arg>
+<arg>echo vps('Ab1!');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.235432" elapsed="0.000236"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:57.236331" level="INFO">Starting process:
+php -r "function vps($p){
+if(strlen($p)&lt;8) return 'curta';
+if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';
+if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';
+if(!preg_match('/[0-9]/',$p)) return 'sem_numero';
+return null;}
+echo vps('Ab1!');"</msg>
+<msg time="2026-10-26T12:03:57.260174" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:57.324112" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:57.324290" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.235768" elapsed="0.088542"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>curta</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.324480" elapsed="0.001251"/>
+</kw>
+<doc>Unitario - Valor limite (abaixo do minimo de 8 chars).
+validatePasswordStrength com 4 chars deve retornar mensagem de erro.</doc>
+<tag>bloco_b</tag>
+<tag>senha</tag>
+<tag>unitario</tag>
+<tag>vantuil</tag>
+<status status="PASS" start="2026-10-26T12:03:57.235146" elapsed="0.090675"/>
+</test>
+<test id="s1-s2-t2" name="T07 Senha Sem Letra Maiuscula Deve Ser Rejeitada" line="31">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:57.326438" level="INFO">${codigo} = function vps($p){
+if(strlen($p)&lt;8) return 'curta';
+if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';
+if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';
+if(!preg_match('/[0-9]/',$p)) return 'sem...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function vps($p){</arg>
+<arg>if(strlen($p)&lt;8) return 'curta';</arg>
+<arg>if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';</arg>
+<arg>if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';</arg>
+<arg>if(!preg_match('/[0-9]/',$p)) return 'sem_numero';</arg>
+<arg>return null;}</arg>
+<arg>echo vps('abc12345!');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.326231" elapsed="0.000226"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:57.327284" level="INFO">Starting process:
+php -r "function vps($p){
+if(strlen($p)&lt;8) return 'curta';
+if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';
+if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';
+if(!preg_match('/[0-9]/',$p)) return 'sem_numero';
+return null;}
+echo vps('abc12345!');"</msg>
+<msg time="2026-10-26T12:03:57.339173" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:57.402319" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:57.402491" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.326554" elapsed="0.075955"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>sem_maiuscula</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.402676" elapsed="0.015434"/>
+</kw>
+<doc>Unitario - Particao invalida (sem maiuscula).
+validatePasswordStrength('abc12345!') deve retornar erro de maiuscula.</doc>
+<tag>bloco_b</tag>
+<tag>senha</tag>
+<tag>unitario</tag>
+<tag>vantuil</tag>
+<status status="PASS" start="2026-10-26T12:03:57.325953" elapsed="0.092312"/>
+</test>
+<test id="s1-s2-t3" name="T08 Senha Sem Letra Minuscula Deve Ser Rejeitada" line="46">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:57.419409" level="INFO">${codigo} = function vps($p){
+if(strlen($p)&lt;8) return 'curta';
+if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';
+if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';
+if(!preg_match('/[0-9]/',$p)) return 'sem...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function vps($p){</arg>
+<arg>if(strlen($p)&lt;8) return 'curta';</arg>
+<arg>if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';</arg>
+<arg>if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';</arg>
+<arg>if(!preg_match('/[0-9]/',$p)) return 'sem_numero';</arg>
+<arg>return null;}</arg>
+<arg>echo vps('ABC12345!');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.418930" elapsed="0.000523"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:57.420438" level="INFO">Starting process:
+php -r "function vps($p){
+if(strlen($p)&lt;8) return 'curta';
+if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';
+if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';
+if(!preg_match('/[0-9]/',$p)) return 'sem_numero';
+return null;}
+echo vps('ABC12345!');"</msg>
+<msg time="2026-10-26T12:03:57.433001" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:57.503217" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:57.503388" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.419634" elapsed="0.083772"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>sem_minuscula</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.503570" elapsed="0.001566"/>
+</kw>
+<doc>Unitario - Particao invalida (sem minuscula).
+validatePasswordStrength('ABC12345!') deve retornar erro de minuscula.</doc>
+<tag>bloco_b</tag>
+<tag>senha</tag>
+<tag>unitario</tag>
+<tag>vantuil</tag>
+<status status="PASS" start="2026-10-26T12:03:57.418480" elapsed="0.086750"/>
+</test>
+<test id="s1-s2-t4" name="T09 Senha Sem Numero Deve Ser Rejeitada" line="61">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:57.505842" level="INFO">${codigo} = function vps($p){
+if(strlen($p)&lt;8) return 'curta';
+if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';
+if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';
+if(!preg_match('/[0-9]/',$p)) return 'sem...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function vps($p){</arg>
+<arg>if(strlen($p)&lt;8) return 'curta';</arg>
+<arg>if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';</arg>
+<arg>if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';</arg>
+<arg>if(!preg_match('/[0-9]/',$p)) return 'sem_numero';</arg>
+<arg>return null;}</arg>
+<arg>echo vps('Abcdefg!');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.505639" elapsed="0.000223"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:57.506497" level="INFO">Starting process:
+php -r "function vps($p){
+if(strlen($p)&lt;8) return 'curta';
+if(!preg_match('/[A-Z]/',$p)) return 'sem_maiuscula';
+if(!preg_match('/[a-z]/',$p)) return 'sem_minuscula';
+if(!preg_match('/[0-9]/',$p)) return 'sem_numero';
+return null;}
+echo vps('Abcdefg!');"</msg>
+<msg time="2026-10-26T12:03:57.514914" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:57.597271" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:57.597441" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.506034" elapsed="0.091425"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>sem_numero</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.598927" elapsed="0.004887"/>
+</kw>
+<doc>Unitario - Particao invalida (sem digito numerico).
+validatePasswordStrength('Abcdefg!') deve retornar erro de numero.</doc>
+<tag>bloco_b</tag>
+<tag>senha</tag>
+<tag>unitario</tag>
+<tag>vantuil</tag>
+<status status="PASS" start="2026-10-26T12:03:57.505362" elapsed="0.098568"/>
+</test>
+<test id="s1-s2-t5" name="T10 Checklist Sem Itens Deve Retornar Mensagem De Erro" line="76">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:57.604709" level="INFO">${codigo} = $itens = [];
+$msg = '';
+if (!is_array($itens) || count($itens) === 0) {
+$msg = 'Adicione pelo menos um item no formulario.';
+}
+echo $msg;</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>$itens = [];</arg>
+<arg>$msg = '';</arg>
+<arg>if (!is_array($itens) || count($itens) === 0) {</arg>
+<arg>$msg = 'Adicione pelo menos um item no formulario.';</arg>
+<arg>}</arg>
+<arg>echo $msg;</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.604432" elapsed="0.000300"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:57.605599" level="INFO">Starting process:
+php -r "$itens = [];
+$msg = '';
+if (!is_array($itens) || count($itens) === 0) {
+$msg = 'Adicione pelo menos um item no formulario.';
+}
+echo $msg;"</msg>
+<msg time="2026-10-26T12:03:57.620809" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:58.564438" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:58.564629" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.604845" elapsed="0.959803"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>Adicione pelo menos um item no formulario.</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.564814" elapsed="0.005854"/>
+</kw>
+<doc>Funcional/API - Causa-efeito: array vazio de itens causa mensagem de bloqueio.
+Replica a logica de checklist_criar.php: se itens vazio retorna mensagem esperada.</doc>
+<tag>bloco_b</tag>
+<tag>checklist</tag>
+<tag>funcional</tag>
+<tag>vantuil</tag>
+<status status="PASS" start="2026-10-26T12:03:57.604090" elapsed="0.966831"/>
+</test>
+<doc>BLOCO B - Senha e Checklist (T06-T10)
+Responsavel: Vantuil Junior Plaster
+
+Testa as funcoes de validacao de forca de senha e
+as regras de criacao de checklist do ClientFlow.
+Conceitos aplicados: particionamento de equivalencia,
+valores limite, analise de causa-efeito e caixa-preta.</doc>
+<status status="PASS" start="2026-10-26T12:03:57.232584" elapsed="1.343856"/>
+</suite>
+<suite id="s1-s3" name="Bloco C Formatacao Vinculo" source="C:\Users\kayky\Downloads\ClientFlow (1)\ClientFlow\tests\robot\bloco_c_formatacao_vinculo.robot">
+<test id="s1-s3-t1" name="T11 Remover Caracteres Nao Numericos De Uma Entrada" line="16">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:58.587615" level="INFO">${codigo} = function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+echo onlyDigits('(11) 91234-5678');</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}</arg>
+<arg>echo onlyDigits('(11) 91234-5678');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.587139" elapsed="0.000525"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:58.593155" level="INFO">Starting process:
+php -r "function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+echo onlyDigits('(11) 91234-5678');"</msg>
+<msg time="2026-10-26T12:03:58.612232" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:58.693188" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:58.693480" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.587871" elapsed="0.105652"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>11912345678</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.694224" elapsed="0.002313"/>
+</kw>
+<doc>Unitario - Caixa-preta: onlyDigits('(11) 91234-5678') deve retornar '11912345678'.
+Tecnica: particao de equivalencia (entrada mista -&gt; saida so digitos).</doc>
+<tag>arthur</tag>
+<tag>bloco_c</tag>
+<tag>formatacao</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:58.586377" elapsed="0.110498"/>
+</test>
+<test id="s1-s3-t2" name="T12 Formatar CPF Com 11 Digitos" line="26">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:58.698963" level="INFO">${codigo} = function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function formatCPF($v){$d=substr(onlyDigits($v),0,11);$l=strlen($d);
+if($l&lt;=3) return $d;
+if($l&lt;=6) return substr($d,0,3).'.'.substr($d...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}</arg>
+<arg>function formatCPF($v){$d=substr(onlyDigits($v),0,11);$l=strlen($d);</arg>
+<arg>if($l&lt;=3) return $d;</arg>
+<arg>if($l&lt;=6) return substr($d,0,3).'.'.substr($d,3);</arg>
+<arg>if($l&lt;=9) return substr($d,0,3).'.'.substr($d,3,3).'.'.substr($d,6);</arg>
+<arg>return substr($d,0,3).'.'.substr($d,3,3).'.'.substr($d,6,3).'-'.substr($d,9);}</arg>
+<arg>echo formatCPF('52998224725');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.698270" elapsed="0.000754"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:58.700246" level="INFO">Starting process:
+php -r "function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function formatCPF($v){$d=substr(onlyDigits($v),0,11);$l=strlen($d);
+if($l&lt;=3) return $d;
+if($l&lt;=6) return substr($d,0,3).'.'.substr($d,3);
+if($l&lt;=9) return substr($d,0,3).'.'.substr($d,3,3).'.'.substr($d,6);
+return substr($d,0,3).'.'.substr($d,3,3).'.'.substr($d,6,3).'-'.substr($d,9);}
+echo formatCPF('52998224725');"</msg>
+<msg time="2026-10-26T12:03:58.710583" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:58.767027" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:58.767438" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.699535" elapsed="0.067930"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>529.982.247-25</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.767660" elapsed="0.002034"/>
+</kw>
+<doc>Unitario - formatCPF('52998224725') deve retornar '529.982.247-25'.
+Tecnica: particao valida (11 digitos) e verificacao de formato.</doc>
+<tag>arthur</tag>
+<tag>bloco_c</tag>
+<tag>cpf</tag>
+<tag>formatacao</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:58.697349" elapsed="0.072446"/>
+</test>
+<test id="s1-s3-t3" name="T13 Formatar CNPJ Com 14 Digitos" line="41">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:58.770428" level="INFO">${codigo} = function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function formatCNPJ($v){$d=substr(onlyDigits($v),0,14);$l=strlen($d);
+if($l&lt;=2) return $d;
+if($l&lt;=5) return substr($d,0,2).'.'.substr($...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}</arg>
+<arg>function formatCNPJ($v){$d=substr(onlyDigits($v),0,14);$l=strlen($d);</arg>
+<arg>if($l&lt;=2) return $d;</arg>
+<arg>if($l&lt;=5) return substr($d,0,2).'.'.substr($d,2);</arg>
+<arg>if($l&lt;=8) return substr($d,0,2).'.'.substr($d,2,3).'.'.substr($d,5);</arg>
+<arg>if($l&lt;=12) return substr($d,0,2).'.'.substr($d,2,3).'.'.substr($d,5,3).'/'.substr($d,8);</arg>
+<arg>return substr($d,0,2).'.'.substr($d,2,3).'.'.substr($d,5,3).'/'.substr($d,8,4).'-'.substr($d,12);}</arg>
+<arg>echo formatCNPJ('11222333000181');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.770204" elapsed="0.000243"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:58.770999" level="INFO">Starting process:
+php -r "function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function formatCNPJ($v){$d=substr(onlyDigits($v),0,14);$l=strlen($d);
+if($l&lt;=2) return $d;
+if($l&lt;=5) return substr($d,0,2).'.'.substr($d,2);
+if($l&lt;=8) return substr($d,0,2).'.'.substr($d,2,3).'.'.substr($d,5);
+if($l&lt;=12) return substr($d,0,2).'.'.substr($d,2,3).'.'.substr($d,5,3).'/'.substr($d,8);
+return substr($d,0,2).'.'.substr($d,2,3).'.'.substr($d,5,3).'/'.substr($d,8,4).'-'.substr($d,12);}
+echo formatCNPJ('11222333000181');"</msg>
+<msg time="2026-10-26T12:03:58.783001" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:58.839584" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:58.839833" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.770542" elapsed="0.069319"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>11.222.333/0001-81</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.840100" elapsed="0.001557"/>
+</kw>
+<doc>Unitario - formatCNPJ('11222333000181') deve retornar '11.222.333/0001-81'.
+Tecnica: particao valida (14 digitos) e verificacao de formato.</doc>
+<tag>arthur</tag>
+<tag>bloco_c</tag>
+<tag>cnpj</tag>
+<tag>formatacao</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:58.769928" elapsed="0.071881"/>
+</test>
+<test id="s1-s3-t4" name="T14 Formatar Telefone Celular Com 11 Digitos" line="57">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:58.842849" level="INFO">${codigo} = function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function formatPhone($v){$d=substr(onlyDigits($v),0,11);$l=strlen($d);
+if($l&lt;=2) return $l ? '('.$d : '';
+if($l&lt;=6) return '('.substr($...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}</arg>
+<arg>function formatPhone($v){$d=substr(onlyDigits($v),0,11);$l=strlen($d);</arg>
+<arg>if($l&lt;=2) return $l ? '('.$d : '';</arg>
+<arg>if($l&lt;=6) return '('.substr($d,0,2).') '.substr($d,2);</arg>
+<arg>if($l&lt;=10) return '('.substr($d,0,2).') '.substr($d,2,4).'-'.substr($d,6);</arg>
+<arg>return '('.substr($d,0,2).') '.substr($d,2,5).'-'.substr($d,7);}</arg>
+<arg>echo formatPhone('11912345678');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.842504" elapsed="0.000374"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:58.844290" level="INFO">Starting process:
+php -r "function onlyDigits($v){return preg_replace('/[^0-9]/','', $v);}
+function formatPhone($v){$d=substr(onlyDigits($v),0,11);$l=strlen($d);
+if($l&lt;=2) return $l ? '('.$d : '';
+if($l&lt;=6) return '('.substr($d,0,2).') '.substr($d,2);
+if($l&lt;=10) return '('.substr($d,0,2).') '.substr($d,2,4).'-'.substr($d,6);
+return '('.substr($d,0,2).') '.substr($d,2,5).'-'.substr($d,7);}
+echo formatPhone('11912345678');"</msg>
+<msg time="2026-10-26T12:03:58.856554" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:58.918361" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:58.918586" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.843072" elapsed="0.075640"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>(11) 91234-5678</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.919061" elapsed="0.002217"/>
+</kw>
+<doc>Unitario - formatPhone('11912345678') deve retornar '(11) 91234-5678'.
+Tecnica: valor limite (11 digitos = celular com 9 digito).</doc>
+<tag>arthur</tag>
+<tag>bloco_c</tag>
+<tag>formatacao</tag>
+<tag>telefone</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:58.842015" elapsed="0.079738"/>
+</test>
+<test id="s1-s3-t5" name="T15 Checklist Ja Associado A Outro Cliente Deve Ser Bloqueado" line="72">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:58.923815" level="INFO">${codigo} = $checklist = ['id' =&gt; 100, 'cliente_id' =&gt; 10];
+$novo_cliente_id = 42;
+$msg = '';
+if ($checklist['cliente_id'] !== null &amp;&amp; $checklist['cliente_id'] !== $novo_cliente_id) {
+$msg = 'Este checklist ja es...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>$checklist = ['id' =&gt; 100, 'cliente_id' =&gt; 10];</arg>
+<arg>$novo_cliente_id = 42;</arg>
+<arg>$msg = '';</arg>
+<arg>if ($checklist['cliente_id'] !== null &amp;&amp; $checklist['cliente_id'] !== $novo_cliente_id) {</arg>
+<arg>$msg = 'Este checklist ja esta vinculado a outro cliente.';</arg>
+<arg>}</arg>
+<arg>echo $msg;</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.923335" elapsed="0.000521"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:58.925239" level="INFO">Starting process:
+php -r "$checklist = ['id' =&gt; 100, 'cliente_id' =&gt; 10];
+$novo_cliente_id = 42;
+$msg = '';
+if ($checklist['cliente_id'] !== null &amp;&amp; $checklist['cliente_id'] !== $novo_cliente_id) {
+$msg = 'Este checklist ja esta vinculado a outro cliente.';
+}
+echo $msg;"</msg>
+<msg time="2026-10-26T12:03:58.948049" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:59.017699" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:59.018028" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.924054" elapsed="0.094032"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>Este checklist ja esta vinculado a outro cliente.</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.018322" elapsed="0.001658"/>
+</kw>
+<doc>Funcional/API - Causa-efeito: checklist com cliente_id diferente
+do solicitante deve retornar mensagem de bloqueio.</doc>
+<tag>arthur</tag>
+<tag>bloco_c</tag>
+<tag>checklist</tag>
+<tag>funcional</tag>
+<status status="PASS" start="2026-10-26T12:03:58.922750" elapsed="0.097359"/>
+</test>
+<doc>BLOCO C - Formatacao e Vinculo de Checklist (T11-T15)
+Responsavel: Arthur Kenji
+
+Testa formatacao de CPF, CNPJ, telefone (onlyDigits/format)
+e as regras de vinculo de checklist por link.
+Conceitos: caixa-preta, particao de equivalencia,
+causa-efeito e analise de valores limite.</doc>
+<status status="PASS" start="2026-10-26T12:03:58.579761" elapsed="0.440611"/>
+</suite>
+<suite id="s1-s4" name="Bloco D Upload Arquivos" source="C:\Users\kayky\Downloads\ClientFlow (1)\ClientFlow\tests\robot\bloco_d_upload_arquivos.robot">
+<test id="s1-s4-t1" name="T16 Extensoes Devem Ser Convertidas Para Minusculas" line="17">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:59.028784" level="INFO">${codigo} = function normalize_extensions($v){
+if(is_array($v)) return null;
+$v=trim((string)$v); if($v==='') return null;
+$parts=explode(',',strtolower($v)); $norm=[];
+foreach($parts as $p){$c=preg_replace('/[^a...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function normalize_extensions($v){</arg>
+<arg>if(is_array($v)) return null;</arg>
+<arg>$v=trim((string)$v); if($v==='') return null;</arg>
+<arg>$parts=explode(',',strtolower($v)); $norm=[];</arg>
+<arg>foreach($parts as $p){$c=preg_replace('/[^a-z0-9]/','',trim($p));</arg>
+<arg>if($c!==''&amp;&amp;!in_array($c,$norm,true))$norm[]=$c;}</arg>
+<arg>return count($norm)?implode(',',$norm):null;}</arg>
+<arg>echo normalize_extensions('JPG,PNG,GIF');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.026878" elapsed="0.001953"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:59.029862" level="INFO">Starting process:
+php -r "function normalize_extensions($v){
+if(is_array($v)) return null;
+$v=trim((string)$v); if($v==='') return null;
+$parts=explode(',',strtolower($v)); $norm=[];
+foreach($parts as $p){$c=preg_replace('/[^a-z0-9]/','',trim($p));
+if($c!==''&amp;&amp;!in_array($c,$norm,true))$norm[]=$c;}
+return count($norm)?implode(',',$norm):null;}
+echo normalize_extensions('JPG,PNG,GIF');"</msg>
+<msg time="2026-10-26T12:03:59.046887" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:59.113071" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:59.113312" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.029057" elapsed="0.084284"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>jpg,png,gif</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.113714" elapsed="0.002011"/>
+</kw>
+<doc>Unitario - Caixa-preta: normalize_extensions('JPG,PNG,GIF')
+deve retornar 'jpg,png,gif'.
+Tecnica: particao equivalente (entradas em maiusculas -&gt; minusculas).</doc>
+<tag>bloco_d</tag>
+<tag>matheus_pires</tag>
+<tag>unitario</tag>
+<tag>upload</tag>
+<status status="PASS" start="2026-10-26T12:03:59.026422" elapsed="0.089424"/>
+</test>
+<test id="s1-s4-t2" name="T17 Extensoes Duplicadas Devem Ser Removidas" line="34">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:59.117642" level="INFO">${codigo} = function normalize_extensions($v){
+if(is_array($v)) return null;
+$v=trim((string)$v); if($v==='') return null;
+$parts=explode(',',strtolower($v)); $norm=[];
+foreach($parts as $p){$c=preg_replace('/[^a...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function normalize_extensions($v){</arg>
+<arg>if(is_array($v)) return null;</arg>
+<arg>$v=trim((string)$v); if($v==='') return null;</arg>
+<arg>$parts=explode(',',strtolower($v)); $norm=[];</arg>
+<arg>foreach($parts as $p){$c=preg_replace('/[^a-z0-9]/','',trim($p));</arg>
+<arg>if($c!==''&amp;&amp;!in_array($c,$norm,true))$norm[]=$c;}</arg>
+<arg>return count($norm)?implode(',',$norm):null;}</arg>
+<arg>echo normalize_extensions('jpg,png,jpg,gif,png');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.116972" elapsed="0.000722"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:59.118752" level="INFO">Starting process:
+php -r "function normalize_extensions($v){
+if(is_array($v)) return null;
+$v=trim((string)$v); if($v==='') return null;
+$parts=explode(',',strtolower($v)); $norm=[];
+foreach($parts as $p){$c=preg_replace('/[^a-z0-9]/','',trim($p));
+if($c!==''&amp;&amp;!in_array($c,$norm,true))$norm[]=$c;}
+return count($norm)?implode(',',$norm):null;}
+echo normalize_extensions('jpg,png,jpg,gif,png');"</msg>
+<msg time="2026-10-26T12:03:59.132210" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:59.208488" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:59.208755" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.117863" elapsed="0.090935"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>jpg,png,gif</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.209119" elapsed="0.003386"/>
+</kw>
+<doc>Unitario - normalize_extensions('jpg,png,jpg,gif,png')
+deve retornar 'jpg,png,gif' sem duplicatas.
+Tecnica: particao invalida (duplicatas).</doc>
+<tag>bloco_d</tag>
+<tag>matheus_pires</tag>
+<tag>unitario</tag>
+<tag>upload</tag>
+<status status="PASS" start="2026-10-26T12:03:59.116220" elapsed="0.096515"/>
+</test>
+<test id="s1-s4-t3" name="T18 Caracteres Invalidos Das Extensoes Devem Ser Removidos" line="51">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:59.215110" level="INFO">${codigo} = function normalize_extensions($v){
+if(is_array($v)) return null;
+$v=trim((string)$v); if($v==='') return null;
+$parts=explode(',',strtolower($v)); $norm=[];
+foreach($parts as $p){$c=preg_replace('/[^a...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function normalize_extensions($v){</arg>
+<arg>if(is_array($v)) return null;</arg>
+<arg>$v=trim((string)$v); if($v==='') return null;</arg>
+<arg>$parts=explode(',',strtolower($v)); $norm=[];</arg>
+<arg>foreach($parts as $p){$c=preg_replace('/[^a-z0-9]/','',trim($p));</arg>
+<arg>if($c!==''&amp;&amp;!in_array($c,$norm,true))$norm[]=$c;}</arg>
+<arg>return count($norm)?implode(',',$norm):null;}</arg>
+<arg>echo normalize_extensions('.jp@g, .p!ng, g*if');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.214300" elapsed="0.000868"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:59.217030" level="INFO">Starting process:
+php -r "function normalize_extensions($v){
+if(is_array($v)) return null;
+$v=trim((string)$v); if($v==='') return null;
+$parts=explode(',',strtolower($v)); $norm=[];
+foreach($parts as $p){$c=preg_replace('/[^a-z0-9]/','',trim($p));
+if($c!==''&amp;&amp;!in_array($c,$norm,true))$norm[]=$c;}
+return count($norm)?implode(',',$norm):null;}
+echo normalize_extensions('.jp@g, .p!ng, g*if');"</msg>
+<msg time="2026-10-26T12:03:59.232014" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:59.304961" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:59.305142" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.215494" elapsed="0.089668"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>jpg,png,gif</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.305393" elapsed="0.005615"/>
+</kw>
+<doc>Unitario - normalize_extensions('.jp@g, .p!ng, g*if')
+deve retornar somente alfanumericos validos.
+Tecnica: causa-efeito (caracteres especiais -&gt; removidos).</doc>
+<tag>bloco_d</tag>
+<tag>matheus_pires</tag>
+<tag>unitario</tag>
+<tag>upload</tag>
+<status status="PASS" start="2026-10-26T12:03:59.213036" elapsed="0.098966"/>
+</test>
+<test id="s1-s4-t4" name="T19 Tipo Image Deve Retornar Extensoes Padrao" line="68">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:59.312811" level="INFO">${codigo} = function default_extensions_for_type($tipo){
+$mapa=['image'=&gt;'jpg,jpeg,png,gif,webp','file'=&gt;'pdf,doc,docx,xls,xlsx,csv,txt'];
+return $mapa[$tipo] ?? null;}
+echo default_extensions_for_type('image');</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function default_extensions_for_type($tipo){</arg>
+<arg>$mapa=['image'=&gt;'jpg,jpeg,png,gif,webp','file'=&gt;'pdf,doc,docx,xls,xlsx,csv,txt'];</arg>
+<arg>return $mapa[$tipo] ?? null;}</arg>
+<arg>echo default_extensions_for_type('image');</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.312527" elapsed="0.000347"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:59.313865" level="INFO">Starting process:
+php -r "function default_extensions_for_type($tipo){
+$mapa=['image'=&gt;'jpg,jpeg,png,gif,webp','file'=&gt;'pdf,doc,docx,xls,xlsx,csv,txt'];
+return $mapa[$tipo] ?? null;}
+echo default_extensions_for_type('image');"</msg>
+<msg time="2026-10-26T12:03:59.587340" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:59.653446" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:59.653708" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.313114" elapsed="0.340631"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>jpg,jpeg,png,gif,webp</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.654024" elapsed="0.002967"/>
+</kw>
+<doc>Unitario - default_extensions_for_type('image')
+deve retornar 'jpg,jpeg,png,gif,webp'.
+Tecnica: particao equivalente (tipo reconhecido).</doc>
+<tag>bloco_d</tag>
+<tag>matheus_pires</tag>
+<tag>unitario</tag>
+<tag>upload</tag>
+<status status="PASS" start="2026-10-26T12:03:59.312184" elapsed="0.344992"/>
+</test>
+<test id="s1-s4-t5" name="T20 Item Com Status Approved Nao Deve Aceitar Reenvio" line="81">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:59.659376" level="INFO">${codigo} = $item_status = 'approved';
+$pode_reenviar = ($item_status !== 'approved');
+echo $pode_reenviar ? 'pode' : 'bloqueado';</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>$item_status = 'approved';</arg>
+<arg>$pode_reenviar = ($item_status !== 'approved');</arg>
+<arg>echo $pode_reenviar ? 'pode' : 'bloqueado';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.658936" elapsed="0.000482"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:59.660631" level="INFO">Starting process:
+php -r "$item_status = 'approved';
+$pode_reenviar = ($item_status !== 'approved');
+echo $pode_reenviar ? 'pode' : 'bloqueado';"</msg>
+<msg time="2026-10-26T12:03:59.674236" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:59.735633" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:59.735958" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.659604" elapsed="0.076408"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>bloqueado</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.736294" elapsed="0.003195"/>
+</kw>
+<doc>Seguranca/Regra de negocio - Item aprovado nao pode ser reenviado.
+Causa-efeito: status='approved' -&gt; reenvio bloqueado.</doc>
+<tag>bloco_d</tag>
+<tag>matheus_pires</tag>
+<tag>seguranca</tag>
+<tag>upload</tag>
+<status status="PASS" start="2026-10-26T12:03:59.657450" elapsed="0.082217"/>
+</test>
+<doc>BLOCO D - Upload de Arquivos (T16-T20)
+Responsavel: Matheus Pires
+
+Testa as funcoes normalize_extensions() e
+default_extensions_for_type(), alem das regras
+de validacao e persistencia de upload.
+Conceitos: caixa-preta, particao de equivalencia,
+valores limite e analise de causa-efeito.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.020739" elapsed="0.719297"/>
+</suite>
+<suite id="s1-s5" name="Bloco E Templates" source="C:\Users\kayky\Downloads\ClientFlow (1)\ClientFlow\tests\robot\bloco_e_templates.robot">
+<test id="s1-s5-t1" name="T21 Item De Template Sem Nome Deve Ser Rejeitado" line="20">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:59.746046" level="INFO">${codigo} = function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}
+function normalize_extensions($v){if(is_array($v))return null;$v=tri...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}</arg>
+<arg>function normalize_extensions($v){if(is_array($v))return null;$v=trim((string)$v);if($v==='')return null;$parts=explode(',',strtolower($v));$norm=[];foreach($parts as $p){$c=preg_replace('/[^a-z0-9]/','',trim($p));if($c!==''&amp;&amp;!in_array($c,$norm,true))$norm[]=$c;}return count($norm)?implode(',',$norm):null;}</arg>
+<arg>function normalizar_item_template($item){$nome=trim((string)($item['nome']??''));if($nome==='')return null;$tipo=strtolower(trim((string)($item['tipo']??'text')));$tipos=['text','long_text','url','file','image','color'];if(!in_array($tipo,$tipos,true))$tipo='text';$min=parse_int_or_null($item['min_chars']??null);$max=parse_int_or_null($item['max_chars']??null);if($min!==null&amp;&amp;$max!==null&amp;&amp;$min&gt;$max){$tmp=$min;$min=$max;$max=$tmp;}return['nome'=&gt;$nome,'tipo'=&gt;$tipo,'descricao'=&gt;trim((string)($item['descricao']??'')),'min_chars'=&gt;$min,'max_chars'=&gt;$max,'allowed_extensions'=&gt;normalize_extensions($item['allowed_extensions']??null),'max_file_size_kb'=&gt;parse_int_or_null($item['max_file_size_kb']??null),'min_width'=&gt;parse_int_or_null($item['min_width']??null),'max_width'=&gt;parse_int_or_null($item['max_width']??null),'min_height'=&gt;parse_int_or_null($item['min_height']??null),'max_height'=&gt;parse_int_or_null($item['max_height']??null)];}</arg>
+<arg>$r = normalizar_item_template(['nome' =&gt; '</arg>
+<arg>', 'tipo' =&gt; 'text']);</arg>
+<arg>echo $r === null ? 'null' : 'nao_null';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.745643" elapsed="0.000441"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:59.747138" level="INFO">Starting process:
+php -r "function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}
+function normalize_extensions($v){if(is_array($v))return null;$v=trim((string)$v);if($v==='')return null;$parts=explode(',',strtolower($v));$norm=[];foreach($parts as $p){$c=preg_replace('/[^a-z0-9]/','',trim($p));if($c!==''&amp;&amp;!in_array($c,$norm,true))$norm[]=$c;}return count($norm)?implode(',',$norm):null;}
+function normalizar_item_template($item){$nome=trim((string)($item['nome']??''));if($nome==='')return null;$tipo=strtolower(trim((string)($item['tipo']??'text')));$tipos=['text','long_text','url','file','image','color'];if(!in_array($tipo,$tipos,true))$tipo='text';$min=parse_int_or_null($item['min_chars']??null);$max=parse_int_or_null($item['max_chars']??null);if($min!==null&amp;&amp;$max!==null&amp;&amp;$min&gt;$max){$tmp=$min;$min=$max;$max=$tmp;}return['nome'=&gt;$nome,'tipo'=&gt;$tipo,'descricao'=&gt;trim((string)($item['descricao']??'')),'min_chars'=&gt;$min,'max_chars'=&gt;$max,'allowed_extensions'=&gt;normalize_extensions($item['allowed_extensions']??null),'max_file_size_kb'=&gt;parse_int_or_null($item['max_file_size_kb']??null),'min_width'=&gt;parse_int_or_null($item['min_width']??null),'max_width'=&gt;parse_int_or_null($item['max_width']??null),'min_height'=&gt;parse_int_or_null($item['min_height']??null),'max_height'=&gt;parse_int_or_null($item['max_height']??null)];}
+$r = normalizar_item_template(['nome' =&gt; '
+', 'tipo' =&gt; 'text']);
+echo $r === null ? 'null' : 'nao_null';"</msg>
+<msg time="2026-10-26T12:03:59.761377" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:03:59.850668" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:03:59.850846" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.746296" elapsed="0.104570"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>null</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.851109" elapsed="0.000549"/>
+</kw>
+<doc>Unitario - Valor limite: nome vazio deve fazer normalizar_item_template() retornar null.
+Tecnica: particao invalida (campo obrigatorio ausente).</doc>
+<tag>bloco_e</tag>
+<tag>matheus_fonteles</tag>
+<tag>template</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:59.745095" elapsed="0.106655"/>
+</test>
+<test id="s1-s5-t2" name="T22 Tipo De Item Invalido Deve Ser Normalizado Para Text" line="33">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:03:59.852449" level="INFO">${codigo} = function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}
+function normalize_extensions($v){return null;}
+function normalizar_...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}</arg>
+<arg>function normalize_extensions($v){return null;}</arg>
+<arg>function normalizar_item_template($item){$nome=trim((string)($item['nome']??''));if($nome==='')return null;$tipo=strtolower(trim((string)($item['tipo']??'text')));$tipos=['text','long_text','url','file','image','color'];if(!in_array($tipo,$tipos,true))$tipo='text';return['nome'=&gt;$nome,'tipo'=&gt;$tipo,'descricao'=&gt;'','min_chars'=&gt;null,'max_chars'=&gt;null,'allowed_extensions'=&gt;null,'max_file_size_kb'=&gt;null,'min_width'=&gt;null,'max_width'=&gt;null,'min_height'=&gt;null,'max_height'=&gt;null];}</arg>
+<arg>$r = normalizar_item_template(['nome' =&gt; 'Campo X', 'tipo' =&gt; 'banana']);</arg>
+<arg>echo $r['tipo'];</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.852228" elapsed="0.000239"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:03:59.853058" level="INFO">Starting process:
+php -r "function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}
+function normalize_extensions($v){return null;}
+function normalizar_item_template($item){$nome=trim((string)($item['nome']??''));if($nome==='')return null;$tipo=strtolower(trim((string)($item['tipo']??'text')));$tipos=['text','long_text','url','file','image','color'];if(!in_array($tipo,$tipos,true))$tipo='text';return['nome'=&gt;$nome,'tipo'=&gt;$tipo,'descricao'=&gt;'','min_chars'=&gt;null,'max_chars'=&gt;null,'allowed_extensions'=&gt;null,'max_file_size_kb'=&gt;null,'min_width'=&gt;null,'max_width'=&gt;null,'min_height'=&gt;null,'max_height'=&gt;null];}
+$r = normalizar_item_template(['nome' =&gt; 'Campo X', 'tipo' =&gt; 'banana']);
+echo $r['tipo'];"</msg>
+<msg time="2026-10-26T12:03:59.873362" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:04:00.106164" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:04:00.106341" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.852572" elapsed="0.253791"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>text</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.106538" elapsed="0.000734"/>
+</kw>
+<doc>Unitario - Causa-efeito: tipo desconhecido ('banana') -&gt; normalizado para 'text'.
+Tecnica: particao invalida (tipo fora do conjunto valido).</doc>
+<tag>bloco_e</tag>
+<tag>matheus_fonteles</tag>
+<tag>template</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:03:59.851895" elapsed="0.255493"/>
+</test>
+<test id="s1-s5-t3" name="T23 Tipo De Item Valido Deve Ser Mantido" line="46">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:04:00.118981" level="INFO">${codigo} = function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}
+function normalize_extensions($v){return null;}
+function normalizar_...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}</arg>
+<arg>function normalize_extensions($v){return null;}</arg>
+<arg>function normalizar_item_template($item){$nome=trim((string)($item['nome']??''));if($nome==='')return null;$tipo=strtolower(trim((string)($item['tipo']??'text')));$tipos=['text','long_text','url','file','image','color'];if(!in_array($tipo,$tipos,true))$tipo='text';return['nome'=&gt;$nome,'tipo'=&gt;$tipo,'descricao'=&gt;'','min_chars'=&gt;null,'max_chars'=&gt;null,'allowed_extensions'=&gt;null,'max_file_size_kb'=&gt;null,'min_width'=&gt;null,'max_width'=&gt;null,'min_height'=&gt;null,'max_height'=&gt;null];}</arg>
+<arg>$r = normalizar_item_template(['nome' =&gt; 'Logo', 'tipo' =&gt; 'image']);</arg>
+<arg>echo $r['tipo'];</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.118542" elapsed="0.000476"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:04:00.119949" level="INFO">Starting process:
+php -r "function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}
+function normalize_extensions($v){return null;}
+function normalizar_item_template($item){$nome=trim((string)($item['nome']??''));if($nome==='')return null;$tipo=strtolower(trim((string)($item['tipo']??'text')));$tipos=['text','long_text','url','file','image','color'];if(!in_array($tipo,$tipos,true))$tipo='text';return['nome'=&gt;$nome,'tipo'=&gt;$tipo,'descricao'=&gt;'','min_chars'=&gt;null,'max_chars'=&gt;null,'allowed_extensions'=&gt;null,'max_file_size_kb'=&gt;null,'min_width'=&gt;null,'max_width'=&gt;null,'min_height'=&gt;null,'max_height'=&gt;null];}
+$r = normalizar_item_template(['nome' =&gt; 'Logo', 'tipo' =&gt; 'image']);
+echo $r['tipo'];"</msg>
+<msg time="2026-10-26T12:04:00.224633" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:04:00.284776" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:04:00.285004" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.119206" elapsed="0.165830"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>image</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.285281" elapsed="0.002022"/>
+</kw>
+<doc>Unitario - Particao valida: tipo 'image' deve ser mantido inalterado.
+Tecnica: particao equivalente (tipo dentro do conjunto aceito).</doc>
+<tag>bloco_e</tag>
+<tag>matheus_fonteles</tag>
+<tag>template</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:04:00.107602" elapsed="0.179877"/>
+</test>
+<test id="s1-s5-t4" name="T24 Limites Minimo E Maximo Invertidos Devem Ser Trocados" line="59">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:04:00.289547" level="INFO">${codigo} = function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}
+function normalize_extensions($v){return null;}
+function normalizar_...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}</arg>
+<arg>function normalize_extensions($v){return null;}</arg>
+<arg>function normalizar_item_template($item){$nome=trim((string)($item['nome']??''));if($nome==='')return null;$tipo=strtolower(trim((string)($item['tipo']??'text')));$tipos=['text','long_text','url','file','image','color'];if(!in_array($tipo,$tipos,true))$tipo='text';$min=parse_int_or_null($item['min_chars']??null);$max=parse_int_or_null($item['max_chars']??null);if($min!==null&amp;&amp;$max!==null&amp;&amp;$min&gt;$max){$tmp=$min;$min=$max;$max=$tmp;}return['nome'=&gt;$nome,'tipo'=&gt;$tipo,'descricao'=&gt;'','min_chars'=&gt;$min,'max_chars'=&gt;$max,'allowed_extensions'=&gt;null,'max_file_size_kb'=&gt;null,'min_width'=&gt;null,'max_width'=&gt;null,'min_height'=&gt;null,'max_height'=&gt;null];}</arg>
+<arg>$r = normalizar_item_template(['nome' =&gt; 'Biografia', 'tipo' =&gt; 'text', 'min_chars' =&gt; 100, 'max_chars' =&gt; 10]);</arg>
+<arg>echo $r['min_chars'].'|'.$r['max_chars'];</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.288386" elapsed="0.001198"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:04:00.291548" level="INFO">Starting process:
+php -r "function parse_int_or_null($v){if($v===null||$v==='')return null;if(!is_numeric($v))return null;$p=intval($v);return $p&gt;0?$p:null;}
+function normalize_extensions($v){return null;}
+function normalizar_item_template($item){$nome=trim((string)($item['nome']??''));if($nome==='')return null;$tipo=strtolower(trim((string)($item['tipo']??'text')));$tipos=['text','long_text','url','file','image','color'];if(!in_array($tipo,$tipos,true))$tipo='text';$min=parse_int_or_null($item['min_chars']??null);$max=parse_int_or_null($item['max_chars']??null);if($min!==null&amp;&amp;$max!==null&amp;&amp;$min&gt;$max){$tmp=$min;$min=$max;$max=$tmp;}return['nome'=&gt;$nome,'tipo'=&gt;$tipo,'descricao'=&gt;'','min_chars'=&gt;$min,'max_chars'=&gt;$max,'allowed_extensions'=&gt;null,'max_file_size_kb'=&gt;null,'min_width'=&gt;null,'max_width'=&gt;null,'min_height'=&gt;null,'max_height'=&gt;null];}
+$r = normalizar_item_template(['nome' =&gt; 'Biografia', 'tipo' =&gt; 'text', 'min_chars' =&gt; 100, 'max_chars' =&gt; 10]);
+echo $r['min_chars'].'|'.$r['max_chars'];"</msg>
+<msg time="2026-10-26T12:04:00.304212" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:04:00.351636" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:04:00.351877" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.289773" elapsed="0.062143"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>10|100</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.352270" elapsed="0.001431"/>
+</kw>
+<doc>Unitario - Valor limite: min_chars &gt; max_chars deve ter os valores trocados.
+Tecnica: analise de valor limite (min=100, max=10 -&gt; swap para min=10, max=100).</doc>
+<tag>bloco_e</tag>
+<tag>matheus_fonteles</tag>
+<tag>template</tag>
+<tag>unitario</tag>
+<status status="PASS" start="2026-10-26T12:04:00.287730" elapsed="0.066084"/>
+</test>
+<test id="s1-s5-t5" name="T25 Usuario Sem Permissao Nao Deve Salvar Template" line="72">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:04:00.356662" level="INFO">${codigo} = $papel = 'dev';
+$permissoes = ['perm_criar_projetos' =&gt; false];
+$autorizado = $papel === 'admin_agencia' || !empty($permissoes['perm_criar_projetos']);
+echo $autorizado ? 'autorizado' : 'bloqueado';</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>$papel = 'dev';</arg>
+<arg>$permissoes = ['perm_criar_projetos' =&gt; false];</arg>
+<arg>$autorizado = $papel === 'admin_agencia' || !empty($permissoes['perm_criar_projetos']);</arg>
+<arg>echo $autorizado ? 'autorizado' : 'bloqueado';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.354588" elapsed="0.002120"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:04:00.358001" level="INFO">Starting process:
+php -r "$papel = 'dev';
+$permissoes = ['perm_criar_projetos' =&gt; false];
+$autorizado = $papel === 'admin_agencia' || !empty($permissoes['perm_criar_projetos']);
+echo $autorizado ? 'autorizado' : 'bloqueado';"</msg>
+<msg time="2026-10-26T12:04:00.369133" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:04:00.414071" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:04:00.414337" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.357003" elapsed="0.057375"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>bloqueado</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.414684" elapsed="0.002658"/>
+</kw>
+<doc>Seguranca/Autorizacao - Usuario com papel 'dev' sem perm_criar_projetos
+deve ser bloqueado de salvar template.
+Tecnica: tabela de decisao (papel=dev, perm=false -&gt; bloqueado).</doc>
+<tag>bloco_e</tag>
+<tag>matheus_fonteles</tag>
+<tag>seguranca</tag>
+<tag>template</tag>
+<status status="PASS" start="2026-10-26T12:04:00.354043" elapsed="0.063466"/>
+</test>
+<doc>BLOCO E - Templates (T21-T25)
+Responsavel: Matheus Fonteles Pires
+
+Testa a funcao normalizar_item_template() e as
+regras de persistencia e permissao de templates.
+Conceitos: caixa-preta, particao de equivalencia,
+valores limite, causa-efeito e tabela de decisao.</doc>
+<status status="PASS" start="2026-10-26T12:03:59.740542" elapsed="0.677326"/>
+</suite>
+<suite id="s1-s6" name="Bloco F Permissoes Membros" source="C:\Users\kayky\Downloads\ClientFlow (1)\ClientFlow\tests\robot\bloco_f_permissoes_membros.robot">
+<test id="s1-s6-t1" name="T26 Permissao perm_ver_clientes Com Valor 1 Deve Virar Booleano True" line="27">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:04:00.424601" level="INFO">${codigo} = function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_proje...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_projetos'],'perm_criar_projetos'=&gt;(bool)$ua['perm_criar_projetos'],'perm_designar_projetos'=&gt;(bool)$ua['perm_designar_projetos'],'perm_gerenciar_membros'=&gt;(bool)$ua['perm_gerenciar_membros']];}</arg>
+<arg>$ua=['perm_ver_clientes'=&gt;1,'perm_criar_clientes'=&gt;0,'perm_ver_projetos'=&gt;0,'perm_criar_projetos'=&gt;0,'perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;0];</arg>
+<arg>$r = montar_permissoes_sessao($ua);</arg>
+<arg>echo ($r['perm_ver_clientes'] === true) ? 'true' : 'false';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.424298" elapsed="0.000334"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:04:00.428201" level="INFO">Starting process:
+php -r "function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_projetos'],'perm_criar_projetos'=&gt;(bool)$ua['perm_criar_projetos'],'perm_designar_projetos'=&gt;(bool)$ua['perm_designar_projetos'],'perm_gerenciar_membros'=&gt;(bool)$ua['perm_gerenciar_membros']];}
+$ua=['perm_ver_clientes'=&gt;1,'perm_criar_clientes'=&gt;0,'perm_ver_projetos'=&gt;0,'perm_criar_projetos'=&gt;0,'perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;0];
+$r = montar_permissoes_sessao($ua);
+echo ($r['perm_ver_clientes'] === true) ? 'true' : 'false';"</msg>
+<msg time="2026-10-26T12:04:00.439232" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:04:00.484680" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:04:00.484959" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.424779" elapsed="0.060252"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>true</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.485406" elapsed="0.000906"/>
+</kw>
+<doc>Unitario - Caixa-preta: montar_permissoes_sessao com perm_ver_clientes=1
+deve retornar true (booleano estrito).
+Tecnica: particao equivalente (inteiro 1 -&gt; true).</doc>
+<tag>bloco_f</tag>
+<tag>permissoes</tag>
+<tag>unitario</tag>
+<tag>yuri</tag>
+<status status="PASS" start="2026-10-26T12:04:00.423843" elapsed="0.062619"/>
+</test>
+<test id="s1-s6-t2" name="T27 Permissao perm_criar_clientes Com Valor 0 Deve Virar Booleano False" line="40">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:04:00.487667" level="INFO">${codigo} = function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_proje...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_projetos'],'perm_criar_projetos'=&gt;(bool)$ua['perm_criar_projetos'],'perm_designar_projetos'=&gt;(bool)$ua['perm_designar_projetos'],'perm_gerenciar_membros'=&gt;(bool)$ua['perm_gerenciar_membros']];}</arg>
+<arg>$ua=['perm_ver_clientes'=&gt;0,'perm_criar_clientes'=&gt;0,'perm_ver_projetos'=&gt;0,'perm_criar_projetos'=&gt;0,'perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;0];</arg>
+<arg>$r = montar_permissoes_sessao($ua);</arg>
+<arg>echo ($r['perm_criar_clientes'] === false) ? 'false' : 'true';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.487216" elapsed="0.000491"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:04:00.490014" level="INFO">Starting process:
+php -r "function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_projetos'],'perm_criar_projetos'=&gt;(bool)$ua['perm_criar_projetos'],'perm_designar_projetos'=&gt;(bool)$ua['perm_designar_projetos'],'perm_gerenciar_membros'=&gt;(bool)$ua['perm_gerenciar_membros']];}
+$ua=['perm_ver_clientes'=&gt;0,'perm_criar_clientes'=&gt;0,'perm_ver_projetos'=&gt;0,'perm_criar_projetos'=&gt;0,'perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;0];
+$r = montar_permissoes_sessao($ua);
+echo ($r['perm_criar_clientes'] === false) ? 'false' : 'true';"</msg>
+<msg time="2026-10-26T12:04:00.501809" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:04:00.546919" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:04:00.547174" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.487976" elapsed="0.059247"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>false</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.547501" elapsed="0.003072"/>
+</kw>
+<doc>Unitario - Caixa-preta: montar_permissoes_sessao com perm_criar_clientes=0
+deve retornar false (booleano estrito).
+Tecnica: particao equivalente (inteiro 0 -&gt; false).</doc>
+<tag>bloco_f</tag>
+<tag>permissoes</tag>
+<tag>unitario</tag>
+<tag>yuri</tag>
+<status status="PASS" start="2026-10-26T12:04:00.486720" elapsed="0.064073"/>
+</test>
+<test id="s1-s6-t3" name="T28 Permissao perm_ver_projetos Com String 1 Deve Virar Booleano True" line="53">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:04:00.551931" level="INFO">${codigo} = function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_proje...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_projetos'],'perm_criar_projetos'=&gt;(bool)$ua['perm_criar_projetos'],'perm_designar_projetos'=&gt;(bool)$ua['perm_designar_projetos'],'perm_gerenciar_membros'=&gt;(bool)$ua['perm_gerenciar_membros']];}</arg>
+<arg>$ua=['perm_ver_clientes'=&gt;0,'perm_criar_clientes'=&gt;0,'perm_ver_projetos'=&gt;'1','perm_criar_projetos'=&gt;0,'perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;0];</arg>
+<arg>$r = montar_permissoes_sessao($ua);</arg>
+<arg>echo ($r['perm_ver_projetos'] === true) ? 'true' : 'false';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.551550" elapsed="0.000415"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:04:00.553087" level="INFO">Starting process:
+php -r "function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_projetos'],'perm_criar_projetos'=&gt;(bool)$ua['perm_criar_projetos'],'perm_designar_projetos'=&gt;(bool)$ua['perm_designar_projetos'],'perm_gerenciar_membros'=&gt;(bool)$ua['perm_gerenciar_membros']];}
+$ua=['perm_ver_clientes'=&gt;0,'perm_criar_clientes'=&gt;0,'perm_ver_projetos'=&gt;'1','perm_criar_projetos'=&gt;0,'perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;0];
+$r = montar_permissoes_sessao($ua);
+echo ($r['perm_ver_projetos'] === true) ? 'true' : 'false';"</msg>
+<msg time="2026-10-26T12:04:00.569878" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:04:00.617008" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:04:00.617239" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.552179" elapsed="0.065118"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>true</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.617477" elapsed="0.000534"/>
+</kw>
+<doc>Unitario - Causa-efeito: string '1' (vinda do MySQL) deve virar bool true.
+Tecnica: particao equivalente (string '1' -&gt; true via cast (bool)).</doc>
+<tag>bloco_f</tag>
+<tag>permissoes</tag>
+<tag>unitario</tag>
+<tag>yuri</tag>
+<status status="PASS" start="2026-10-26T12:04:00.551086" elapsed="0.067012"/>
+</test>
+<test id="s1-s6-t4" name="T29 Permissao perm_criar_projetos Com String 0 Deve Virar Booleano False" line="65">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:04:00.618680" level="INFO">${codigo} = function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_proje...</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_projetos'],'perm_criar_projetos'=&gt;(bool)$ua['perm_criar_projetos'],'perm_designar_projetos'=&gt;(bool)$ua['perm_designar_projetos'],'perm_gerenciar_membros'=&gt;(bool)$ua['perm_gerenciar_membros']];}</arg>
+<arg>$ua=['perm_ver_clientes'=&gt;0,'perm_criar_clientes'=&gt;0,'perm_ver_projetos'=&gt;0,'perm_criar_projetos'=&gt;'0','perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;0];</arg>
+<arg>$r = montar_permissoes_sessao($ua);</arg>
+<arg>echo ($r['perm_criar_projetos'] === false) ? 'false' : 'true';</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.618477" elapsed="0.000222"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:04:00.619380" level="INFO">Starting process:
+php -r "function montar_permissoes_sessao($ua){return['perm_ver_clientes'=&gt;(bool)$ua['perm_ver_clientes'],'perm_criar_clientes'=&gt;(bool)$ua['perm_criar_clientes'],'perm_ver_projetos'=&gt;(bool)$ua['perm_ver_projetos'],'perm_criar_projetos'=&gt;(bool)$ua['perm_criar_projetos'],'perm_designar_projetos'=&gt;(bool)$ua['perm_designar_projetos'],'perm_gerenciar_membros'=&gt;(bool)$ua['perm_gerenciar_membros']];}
+$ua=['perm_ver_clientes'=&gt;0,'perm_criar_clientes'=&gt;0,'perm_ver_projetos'=&gt;0,'perm_criar_projetos'=&gt;'0','perm_designar_projetos'=&gt;0,'perm_gerenciar_membros'=&gt;0];
+$r = montar_permissoes_sessao($ua);
+echo ($r['perm_criar_projetos'] === false) ? 'false' : 'true';"</msg>
+<msg time="2026-10-26T12:04:00.628637" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:04:00.672428" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:04:00.672714" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.618798" elapsed="0.053952"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>false</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.672999" elapsed="0.001698"/>
+</kw>
+<doc>Unitario - Causa-efeito: string '0' (vinda do MySQL) deve virar bool false.
+Tecnica: particao equivalente (string '0' -&gt; false via cast (bool)).</doc>
+<tag>bloco_f</tag>
+<tag>permissoes</tag>
+<tag>unitario</tag>
+<tag>yuri</tag>
+<status status="PASS" start="2026-10-26T12:04:00.618230" elapsed="0.056646"/>
+</test>
+<test id="s1-s6-t5" name="T30 Nao Admin Nao Deve Conseguir Alterar Status De Outra Conta" line="77">
+<kw name="Catenate" owner="BuiltIn">
+<msg time="2026-10-26T12:04:00.676228" level="INFO">${codigo} = $sessao = ['usuario_id' =&gt; 999, 'usuario_tipo' =&gt; 'agency'];
+$msg = '';
+if ($sessao['usuario_tipo'] !== 'admin') {
+$msg = 'Perfil sem permissao para acessar esta area.';
+}
+echo $msg;</msg>
+<var>${codigo}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>$sessao = ['usuario_id' =&gt; 999, 'usuario_tipo' =&gt; 'agency'];</arg>
+<arg>$msg = '';</arg>
+<arg>if ($sessao['usuario_tipo'] !== 'admin') {</arg>
+<arg>$msg = 'Perfil sem permissao para acessar esta area.';</arg>
+<arg>}</arg>
+<arg>echo $msg;</arg>
+<doc>Concatenates the given items together and returns the resulted string.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.675725" elapsed="0.000543"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2026-10-26T12:04:00.677322" level="INFO">Starting process:
+php -r "$sessao = ['usuario_id' =&gt; 999, 'usuario_tipo' =&gt; 'agency'];
+$msg = '';
+if ($sessao['usuario_tipo'] !== 'admin') {
+$msg = 'Perfil sem permissao para acessar esta area.';
+}
+echo $msg;"</msg>
+<msg time="2026-10-26T12:04:00.694656" level="INFO">Waiting for process to complete.</msg>
+<msg time="2026-10-26T12:04:00.740853" level="INFO">Process completed.</msg>
+<msg time="2026-10-26T12:04:00.741141" level="INFO">${resultado} = &lt;result object with rc 0&gt;</msg>
+<var>${resultado}</var>
+<arg>php</arg>
+<arg>-r</arg>
+<arg>${codigo}</arg>
+<arg>stdout=PIPE</arg>
+<arg>stderr=PIPE</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.676486" elapsed="0.064691"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${resultado.stdout.strip()}</arg>
+<arg>Perfil sem permissao para acessar esta area.</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.741477" elapsed="0.001513"/>
+</kw>
+<doc>Seguranca/Autorizacao - Usuario com tipo 'agency' nao pode usar
+admin_usuario_atualizar_status. Deve receber mensagem de bloqueio.
+Tecnica: tabela de decisao (tipo != admin -&gt; acesso bloqueado).</doc>
+<tag>bloco_f</tag>
+<tag>permissoes</tag>
+<tag>seguranca</tag>
+<tag>yuri</tag>
+<status status="PASS" start="2026-10-26T12:04:00.675121" elapsed="0.068002"/>
+</test>
+<doc>BLOCO F - Permissoes e Membros (T26-T30)
+Responsavel: Yuri Allegreti
+
+Testa a funcao montar_permissoes_sessao() (conversao 0/1-&gt;bool)
+e as regras de cadastro, rejeicao e remocao de colaboradores.
+Conceitos: caixa-preta, particao de equivalencia,
+causa-efeito e tabela de decisao.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.418249" elapsed="0.325151"/>
+</suite>
+<kw name="Log" owner="BuiltIn" type="TEARDOWN">
+<msg time="2026-10-26T12:04:00.745196" level="INFO">Suite concluída</msg>
+<arg>Suite concluída</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-10-26T12:04:00.744087" elapsed="0.001192"/>
+</kw>
+<doc>Suite principal do ClientFlow — Robot Framework
+Agrupa os 30 casos de teste dos 6 blocos (A-F),
+5 testes por integrante x 6 integrantes.
+
+Para executar todos os testes:
+  robot tests/robot/
+
+Para executar por bloco (ex: bloco A):
+  robot --include bloco_a tests/robot/
+
+Para executar por integrante (ex: Kayky):
+  robot --include kayky tests/robot/
+
+Tags disponíveis por integrante:
+  kayky, vantuil, arthur, matheus_pires, matheus_fonteles, yuri
+
+Tags por tipo de teste:
+  unitario, integracao, funcional, seguranca
+
+Tags por bloco:
+  bloco_a, bloco_b, bloco_c, bloco_d, bloco_e, bloco_f</doc>
+<status status="PASS" start="2026-10-26T12:03:55.669163" elapsed="5.076220"/>
+</suite>
+<statistics>
+<total>
+<stat pass="30" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="5" fail="0" skip="0">arthur</stat>
+<stat pass="5" fail="0" skip="0">bloco_a</stat>
+<stat pass="5" fail="0" skip="0">bloco_b</stat>
+<stat pass="5" fail="0" skip="0">bloco_c</stat>
+<stat pass="5" fail="0" skip="0">bloco_d</stat>
+<stat pass="5" fail="0" skip="0">bloco_e</stat>
+<stat pass="5" fail="0" skip="0">bloco_f</stat>
+<stat pass="2" fail="0" skip="0">checklist</stat>
+<stat pass="3" fail="0" skip="0">cnpj</stat>
+<stat pass="3" fail="0" skip="0">cpf</stat>
+<stat pass="4" fail="0" skip="0">formatacao</stat>
+<stat pass="2" fail="0" skip="0">funcional</stat>
+<stat pass="1" fail="0" skip="0">integracao</stat>
+<stat pass="5" fail="0" skip="0">kayky</stat>
+<stat pass="1" fail="0" skip="0">login</stat>
+<stat pass="5" fail="0" skip="0">matheus_fonteles</stat>
+<stat pass="5" fail="0" skip="0">matheus_pires</stat>
+<stat pass="5" fail="0" skip="0">permissoes</stat>
+<stat pass="3" fail="0" skip="0">seguranca</stat>
+<stat pass="4" fail="0" skip="0">senha</stat>
+<stat pass="1" fail="0" skip="0">telefone</stat>
+<stat pass="5" fail="0" skip="0">template</stat>
+<stat pass="24" fail="0" skip="0">unitario</stat>
+<stat pass="5" fail="0" skip="0">upload</stat>
+<stat pass="5" fail="0" skip="0">vantuil</stat>
+<stat pass="5" fail="0" skip="0">yuri</stat>
+</tag>
+<suite>
+<stat name="Robot" id="s1" pass="30" fail="0" skip="0">Robot</stat>
+<stat name="Bloco A Login Cadastro" id="s1-s1" pass="5" fail="0" skip="0">Robot.Bloco A Login Cadastro</stat>
+<stat name="Bloco B Senha Checklist" id="s1-s2" pass="5" fail="0" skip="0">Robot.Bloco B Senha Checklist</stat>
+<stat name="Bloco C Formatacao Vinculo" id="s1-s3" pass="5" fail="0" skip="0">Robot.Bloco C Formatacao Vinculo</stat>
+<stat name="Bloco D Upload Arquivos" id="s1-s4" pass="5" fail="0" skip="0">Robot.Bloco D Upload Arquivos</stat>
+<stat name="Bloco E Templates" id="s1-s5" pass="5" fail="0" skip="0">Robot.Bloco E Templates</stat>
+<stat name="Bloco F Permissoes Membros" id="s1-s6" pass="5" fail="0" skip="0">Robot.Bloco F Permissoes Membros</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
